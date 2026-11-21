@@ -1,0 +1,251 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 1. External Data Providers
+model DataProvider {
+  id                    String                      @id @default(cuid())
+  slug                  String                      @unique // e.g. "celestrak", "nasa-gibs", "spacetrack", "copernicus"
+  name                  String
+  category              String                      // "orbital", "earth-imagery", "spacecraft-media", "ephemeris"
+  website               String
+  authType              String                      // "PUBLIC_REST", "API_KEY", "OAUTH2", "BASIC_AUTH"
+  isEnabled             Boolean                     @default(true)
+  lastSuccessfulSync    DateTime?
+  errorCount            Int                         @default(0)
+  lastErrorMessage      String?
+  createdAt             DateTime                    @default(now())
+  updatedAt             DateTime                    @updatedAt
+
+  credentials           ProviderCredentialMetadata?
+  syncLogs              DataSyncLog[]
+  dataSources           DataSource[]
+}
+
+// 2. Provider Credential Metadata (Never stores plain secrets in DB)
+model ProviderCredentialMetadata {
+  id                    String        @id @default(cuid())
+  providerId            String        @unique
+  provider              DataProvider  @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  isConfigured          Boolean       @default(false)
+  maskedKey             String?       // e.g. "AIza••••••••"
+  environmentVariable   String        // e.g. "NASA_API_KEY"
+  tokenExpiresAt        DateTime?
+  rateLimitLimit        Int?
+  rateLimitRemaining    Int?
+  rateLimitResetAt      DateTime?
+  updatedAt             DateTime      @updatedAt
+}
+
+// 3. Tracked Satellites
+model Satellite {
+  noradId               Int                         @id
+  name                  String
+  category              String                      // "earth-observation", "space-stations", "scientific", "navigation-comms", "weather"
+  orbitType             String                      // "LEO", "MEO", "GEO", "HEO"
+  operator              String
+  purpose               String
+  launchYear            Int
+  passThresholdKm       Float?
+  isActive              Boolean                     @default(true)
+  createdAt             DateTime                    @default(now())
+  updatedAt             DateTime                    @updatedAt
+
+  orbitalElements       OrbitalElement[]
+  historicalElements    HistoricalOrbitalElement[]
+  positions             SatellitePosition[]
+  passes                SatellitePass[]
+}
+
+// 4. Current Orbital Elements (OMM / TLE)
+model OrbitalElement {
+  id                    String        @id @default(cuid())
+  satelliteId           Int
+  satellite             Satellite     @relation(fields: [satelliteId], references: [noradId], onDelete: Cascade)
+  epoch                 DateTime
+  line1                 String
+  line2                 String
+  inclinationDeg        Float
+  raanDeg               Float
+  eccentricity          Float
+  meanMotion            Float
+  periodMinutes         Float
+  bstar                 Float
+  source                String        // e.g. "CelesTrak", "Space-Track"
+  createdAt             DateTime      @default(now())
+
+  @@index([satelliteId, epoch])
+}
+
+// 5. Historical Orbital Elements (Space-Track GP_History)
+model HistoricalOrbitalElement {
+  id                    String        @id @default(cuid())
+  satelliteId           Int
+  satellite             Satellite     @relation(fields: [satelliteId], references: [noradId], onDelete: Cascade)
+  epoch                 DateTime
+  line1                 String
+  line2                 String
+  inclinationDeg        Float
+  raanDeg               Float
+  eccentricity          Float
+  meanMotion            Float
+  periodMinutes         Float
+  bstar                 Float
+  retrievalTimestamp    DateTime      @default(now())
+
+  @@index([satelliteId, epoch])
+}
+
+// 6. Real-time Calculated Positions (SGP4 Propagation)
+model SatellitePosition {
+  id                    String        @id @default(cuid())
+  satelliteId           Int
+  satellite             Satellite     @relation(fields: [satelliteId], references: [noradId], onDelete: Cascade)
+  timestamp             DateTime
+  latitude              Float
+  longitude             Float
+  altitudeKm            Float
+  velocityKmS           Float
+  isSunlit              Boolean
+  calculationType       String        // "SGP4_PROPAGATION"
+  createdAt             DateTime      @default(now())
+
+  @@index([satelliteId, timestamp])
+}
+
+// 7. Observer Passes
+model SatellitePass {
+  id                    String        @id @default(cuid())
+  satelliteId           Int
+  satellite             Satellite     @relation(fields: [satelliteId], references: [noradId], onDelete: Cascade)
+  observerName          String
+  startTime             DateTime
+  maxElevationTime      DateTime
+  endTime               DateTime
+  maxElevationDeg       Float
+  isOpticallyVisible    Boolean
+  durationSeconds       Int
+  createdAt             DateTime      @default(now())
+
+  @@index([satelliteId, startTime])
+}
+
+// 8. Earth Imagery Scenes (Copernicus & GIBS)
+model EarthImagery {
+  id                    String        @id @default(cuid())
+  collectionId          String?
+  collection            ImageryCollection? @relation(fields: [collectionId], references: [id])
+  mission               String        // "Sentinel-2", "Sentinel-1", "Landsat 8"
+  sensor                String
+  acquisitionDate       DateTime
+  cloudCoverPercent     Float?
+  processingLevel       String
+  locationName          String
+  minLat                Float
+  minLon                Float
+  maxLat                Float
+  maxLon                Float
+  thumbnailUrl          String
+  fullResolutionUrl     String?
+  spectralBands         String[]      // e.g. ["B02", "B03", "B04", "B08"]
+  provider              String        // "Copernicus Data Space", "NASA GIBS"
+  createdAt             DateTime      @default(now())
+
+  observations          DataObservation[]
+}
+
+// 9. Imagery Collections (e.g. "Himalayan Glaciers 2026", "Ganges Delta Monsoons")
+model ImageryCollection {
+  id                    String        @id @default(cuid())
+  slug                  String        @unique
+  title                 String
+  description           String
+  scenes                EarthImagery[]
+  createdAt             DateTime      @default(now())
+}
+
+// 10. Authentic Spacecraft Photographs (NASA Image Library)
+model SpacecraftPhotograph {
+  nasaId                String        @id
+  title                 String
+  description           String
+  dateCreated           DateTime?
+  center                String
+  photographer          String?
+  thumbnailUrl          String
+  originalUrl           String
+  keywords              String[]
+  provider              String        @default("NASA Image and Video Library")
+  createdAt             DateTime      @default(now())
+}
+
+// 11. Celestial Objects (Planets, Moon, Sun, Asteroids)
+model CelestialObject {
+  id                    String        @id // e.g. "sun", "moon", "mars", "jupiter"
+  commandId             String        // JPL Horizons ID, e.g. "499"
+  name                  String
+  sanskritName          String
+  category              String        // "star", "moon", "terrestrial-planet", "gas-giant", "ice-giant"
+  ephemerides           PlanetaryEphemeris[]
+}
+
+// 12. Planetary Ephemerides (NASA JPL Horizons)
+model PlanetaryEphemeris {
+  id                    String        @id @default(cuid())
+  objectId              String
+  object                CelestialObject @relation(fields: [objectId], references: [id], onDelete: Cascade)
+  date                  DateTime
+  referenceFrame        String        // "ICRF / J2000.0"
+  rightAscension        String
+  declination           String
+  apparentMagnitude     Float
+  distanceAU            Float
+  distanceKm            Float
+  createdAt             DateTime      @default(now())
+
+  @@index([objectId, date])
+}
+
+// 13. Data Synchronization Logs
+model DataSyncLog {
+  id                    String        @id @default(cuid())
+  providerId            String
+  provider              DataProvider  @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  syncType              String        // "TLE_INGESTION", "EPHEMERIS_UPDATE", "IMAGERY_QUERY"
+  status                String        // "SUCCESS", "FAILURE", "PARTIAL"
+  itemCount             Int           @default(0)
+  durationMs            Int
+  errorMessage          String?
+  timestamp             DateTime      @default(now())
+}
+
+// 14. Data Sources & Observations
+model DataSource {
+  id                    String        @id @default(cuid())
+  name                  String
+  providerId            String
+  provider              DataProvider  @relation(fields: [providerId], references: [id])
+  licenseType           String
+  attributionText       String
+  observations          DataObservation[]
+}
+
+model DataObservation {
+  id                    String        @id @default(cuid())
+  sourceId              String
+  source                DataSource    @relation(fields: [sourceId], references: [id])
+  earthImageryId        String?
+  earthImagery          EarthImagery? @relation(fields: [earthImageryId], references: [id])
+  observationTime       DateTime
+  scientificStatus      String        // "REAL_OBSERVATION", "CALCULATED", "PREDICTED"
+  rawPayload            Json?
+  createdAt             DateTime      @default(now())
+}
