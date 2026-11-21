@@ -136,13 +136,13 @@ const PLANET_COLORS: Record<string, { color: string; hex: string; sanskrit: stri
 };
 
 const WEEKDAY_LORDS = [
-  { day: 'Sunday (रविवार)', lord: 'Sun (सूर्य)', color: 'Brilliant Gold / Saffron', hex: '#f59e0b', critical: 'Dull Grey & Muddy Black' },
-  { day: 'Monday (सोमवार)', lord: 'Moon (चन्द्र)', color: 'Pearl White / Silvery Cream', hex: '#f1f5f9', critical: 'Dark Charcoal & Blood Red' },
-  { day: 'Tuesday (मङ्गलवार)', lord: 'Mars (मङ्गल)', color: 'Coral Red / Bright Crimson', hex: '#ef4444', critical: 'Dull Black & Muddy Brown' },
-  { day: 'Wednesday (बुधवार)', lord: 'Mercury (बुध)', color: 'Emerald Green / Fresh Mint', hex: '#10b981', critical: 'Fiery Orange & Dark Red' },
-  { day: 'Thursday (गुरुवार)', lord: 'Jupiter (गुरु)', color: 'Turmeric Yellow / Golden Amber', hex: '#eab308', critical: 'Harsh Violet & Jet Black' },
-  { day: 'Friday (शुक्रवार)', lord: 'Venus (शुक्र)', color: 'Diamond White / Soft Pastel Pink', hex: '#fbcfe8', critical: 'Harsh Mustard & Rusty Brown' },
-  { day: 'Saturday (शनिवार)', lord: 'Saturn (शनि)', color: 'Royal Navy Blue / Deep Indigo', hex: '#1e3a8a', critical: 'Fiery Scarlet & Bright Crimson' }
+  { day: 'Sunday (रविवार)', lord: 'Sun (सूर्य)', color: 'Brilliant Gold / Saffron', hex: '#f59e0b', critical: 'Dull Grey & Muddy Black', criticalHex: '#4b5563' },
+  { day: 'Monday (सोमवार)', lord: 'Moon (चन्द्र)', color: 'Pearl White / Silvery Cream', hex: '#f1f5f9', critical: 'Dark Charcoal & Blood Red', criticalHex: '#991b1b' },
+  { day: 'Tuesday (मङ्गलवार)', lord: 'Mars (मङ्गल)', color: 'Coral Red / Bright Crimson', hex: '#ef4444', critical: 'Dull Black & Muddy Brown', criticalHex: '#451a03' },
+  { day: 'Wednesday (बुधवार)', lord: 'Mercury (बुध)', color: 'Emerald Green / Fresh Mint', hex: '#10b981', critical: 'Fiery Orange & Dark Red', criticalHex: '#ea580c' },
+  { day: 'Thursday (गुरुवार)', lord: 'Jupiter (गुरु)', color: 'Turmeric Yellow / Golden Amber', hex: '#eab308', critical: 'Harsh Violet & Jet Black', criticalHex: '#581c87' },
+  { day: 'Friday (शुक्रवार)', lord: 'Venus (शुक्र)', color: 'Diamond White / Soft Pastel Pink', hex: '#fbcfe8', critical: 'Harsh Mustard & Rusty Brown', criticalHex: '#a16207' },
+  { day: 'Saturday (शनिवार)', lord: 'Saturn (शनि)', color: 'Royal Navy Blue / Deep Indigo', hex: '#1e3a8a', critical: 'Fiery Scarlet & Bright Crimson', criticalHex: '#dc2626' }
 ];
 
 /**
@@ -287,7 +287,7 @@ export function calculateRishiMuniReading(input: RishiMuniBirthInput): RishiMuni
     },
     todayCriticalColor: {
       colorName: todayRuler.critical,
-      hex: '#262626',
+      hex: todayRuler.criticalHex,
       sanskritName: 'वर्ज्य वर्ण (Caution Color)',
       avoidReason: `Clashes with ${todayRuler.lord}'s diurnal vibration, potentially amplifying irritability or scatter.`,
       warningMessage: `Rishi Muni advises avoiding dense ${todayRuler.critical} fabrics today to maintain inner mental clarity during critical discussions.`

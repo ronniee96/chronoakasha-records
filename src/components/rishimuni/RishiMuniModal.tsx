@@ -598,7 +598,17 @@ export function RishiMuniModal({
                         <AlertTriangle className="w-3.5 h-3.5" />
                         <span>Today&apos;s Critical Color (आज का वर्ज्य रंग)</span>
                       </span>
-                      <span className="w-5 h-5 rounded-full border border-white/20 bg-neutral-900 shadow-md" />
+                      <div className="relative flex items-center justify-center">
+                        <span 
+                          className="w-5 h-5 rounded-full border border-white/40 shadow-md flex items-center justify-center relative overflow-hidden" 
+                          style={{ backgroundColor: reading.colorOracle.todayCriticalColor.hex }}
+                          title={`Avoid ${reading.colorOracle.todayCriticalColor.colorName}`}
+                        >
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="w-5 h-[1.5px] bg-rose-500 rotate-45 shadow-sm"></div>
+                          </div>
+                        </span>
+                      </div>
                     </div>
                     <div className="text-base font-serif font-bold text-rose-300">
                       {reading.colorOracle.todayCriticalColor.colorName}
