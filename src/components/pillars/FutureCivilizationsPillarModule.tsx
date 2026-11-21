@@ -38,6 +38,7 @@ import {
   FUTURE_SCENARIOS, 
   ScenarioHorizon,
   WHAT_IF_TYPE_III_VIDEO,
+  PBS_SPACETIME_TYPE_I_VIDEO,
   DocumentaryChapter
 } from '../../data/futureCivilizationsData';
 import { soundManager } from '../../utils/audio';
@@ -57,7 +58,8 @@ export function FutureCivilizationsPillarModule({
   const { mode: presentationMode, setMode: setPresentationMode, isCinematic, isResearch, isReading } = usePresentationMode();
 
   const [activeTab, setActiveTab] = useState<'kardashev' | 'documentary' | 'fermi' | 'transhumanism' | 'horizons'>('kardashev');
-  const [selectedKType, setSelectedKType] = useState<string>('Type II');
+  const [selectedKType, setSelectedKType] = useState<string>('Type I');
+  const [activeDocVideo, setActiveDocVideo] = useState<'type1' | 'type3'>('type1');
   const [selectedChapterIndex, setSelectedChapterIndex] = useState<number>(0);
   const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
   const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
@@ -341,12 +343,18 @@ export function FutureCivilizationsPillarModule({
                         <button
                           onClick={() => {
                             soundManager.playClick();
+                            if (activeKardashev.type === 'Type I') {
+                              setActiveDocVideo('type1');
+                            } else {
+                              setActiveDocVideo('type3');
+                            }
+                            setSelectedChapterIndex(0);
                             setActiveTab('documentary');
                           }}
                           className="px-3 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-xs font-mono font-bold text-amber-300 flex items-center gap-1.5 transition-all active:scale-95"
                         >
                           <PlayCircle className="w-3.5 h-3.5 text-rose-400" />
-                          <span>Watch Type I–III Video Theater</span>
+                          <span>Watch {activeKardashev.type === 'Type I' ? 'PBS Space Time Type 1' : 'Type I–III'} Theater</span>
                           <ArrowRight className="w-3.5 h-3.5" />
                         </button>
                       </div>
@@ -558,270 +566,410 @@ export function FutureCivilizationsPillarModule({
           </div>
         )}
 
-        {/* ================= TAB 2: TYPE I–III VIDEO DOCUMENTARY THEATER ================= */}
-        {activeTab === 'documentary' && (
-          <div className="space-y-10 animate-in fade-in duration-300">
-            {/* Video Theater Hero Header */}
-            <div className="text-center max-w-3xl mx-auto space-y-3">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 font-mono text-xs uppercase tracking-widest shadow-sm">
-                <Film className="w-3.5 h-3.5" />
-                <span>WHAT IF SCIENCE SHOW • FULL TYPE I–III SCIENTIFIC EXPEDITION</span>
-              </div>
-              <h2 className="text-3xl sm:text-5xl font-serif font-black text-[#fde047] tracking-tight">
-                What If Earth Became a Type III Civilization?
-              </h2>
-              <p className="text-sm sm:text-base text-gray-300 font-sans leading-relaxed">
-                Trace humanity&apos;s ascent across the Kardashev boundary: from our fragile 0.73 planetary baseline, to AI-accelerated nuclear fusion, Freeman Dyson&apos;s stellar engines, and self-replicating robotic fleets colonizing all 100 billion stars of the Milky Way.
-              </p>
-            </div>
+        {/* ================= TAB 2: TYPE I & III VIDEO DOCUMENTARY THEATER ================= */}
+        {activeTab === 'documentary' && (() => {
+          const currentDocVideo = activeDocVideo === 'type1' ? PBS_SPACETIME_TYPE_I_VIDEO : WHAT_IF_TYPE_III_VIDEO;
+          const currentChapters = currentDocVideo.chapters;
+          const activeChapter = currentChapters[selectedChapterIndex] || currentChapters[0];
 
-            {/* Responsive 16:9 YouTube Video Embed Player */}
-            <div className="relative rounded-3xl overflow-hidden border border-amber-500/40 shadow-[0_0_50px_rgba(245,158,11,0.25)] bg-black max-w-5xl mx-auto">
-              <div className="aspect-video w-full bg-black">
-                <iframe
-                  src="https://www.youtube.com/embed/VGLSPU8lprc?rel=0"
-                  title="What If Earth Became a Type III Civilization?"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                  className="w-full h-full border-0"
-                />
+          return (
+            <div className="space-y-10 animate-in fade-in duration-300">
+              {/* Documentary Switcher Dock (Type I vs Type III) */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 max-w-5xl mx-auto p-2 rounded-2xl bg-black/60 border border-white/15 backdrop-blur-xl shadow-xl">
+                <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest pl-2">
+                  Select Documentary Expedition:
+                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      soundManager.playClick();
+                      setActiveDocVideo('type1');
+                      setSelectedChapterIndex(0);
+                    }}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 ${
+                      activeDocVideo === 'type1'
+                        ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-black shadow-lg shadow-cyan-500/30'
+                        : 'text-[#9ca3af] hover:text-[#efe6d6] hover:bg-white/5'
+                    }`}
+                  >
+                    <Globe2 className="w-4 h-4" />
+                    <span>Type I • PBS Space Time (174 Petawatts)</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      soundManager.playClick();
+                      setActiveDocVideo('type3');
+                      setSelectedChapterIndex(0);
+                    }}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all duration-200 ${
+                      activeDocVideo === 'type3'
+                        ? 'bg-gradient-to-r from-amber-500 to-rose-600 text-black shadow-lg shadow-amber-500/30'
+                        : 'text-[#9ca3af] hover:text-[#efe6d6] hover:bg-white/5'
+                    }`}
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    <span>Type III • What If Science (Milky Way)</span>
+                  </button>
+                </div>
               </div>
 
-              {/* Floating Meta Bar under Video */}
-              <div className="p-4 sm:p-5 bg-gradient-to-r from-[#18110a] via-[#0f0c08] to-[#18110a] border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-400 shrink-0">
-                    <PlayCircle className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-serif font-bold text-white">
-                      {WHAT_IF_TYPE_III_VIDEO.title}
-                    </h4>
-                    <span className="text-xs font-mono text-gray-400">
-                      Channel: {WHAT_IF_TYPE_III_VIDEO.creator} • Kardashev Type 0.73 to Type III Trajectory
-                    </span>
-                  </div>
+              {/* Video Theater Hero Header */}
+              <div className="text-center max-w-3xl mx-auto space-y-3">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 font-mono text-xs uppercase tracking-widest shadow-sm">
+                  <Film className="w-3.5 h-3.5" />
+                  <span>
+                    {activeDocVideo === 'type1' 
+                      ? 'PBS SPACE TIME • HOSTED BY DR. MATT O\'DOWD' 
+                      : 'WHAT IF SCIENCE SHOW • FULL TYPE I–III SCIENTIFIC EXPEDITION'}
+                  </span>
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-serif font-black text-[#fde047] tracking-tight">
+                  {currentDocVideo.title}
+                </h2>
+                <p className="text-sm sm:text-base text-gray-300 font-sans leading-relaxed">
+                  {currentDocVideo.synopsis}
+                </p>
+              </div>
+
+              {/* Responsive 16:9 YouTube Video Embed Player */}
+              <div className="relative rounded-3xl overflow-hidden border border-amber-500/40 shadow-[0_0_50px_rgba(245,158,11,0.25)] bg-black max-w-5xl mx-auto">
+                <div className="aspect-video w-full bg-black">
+                  <iframe
+                    key={currentDocVideo.videoId}
+                    src={`${currentDocVideo.embedUrl}?rel=0`}
+                    title={currentDocVideo.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    className="w-full h-full border-0"
+                  />
                 </div>
 
-                <a
-                  href={WHAT_IF_TYPE_III_VIDEO.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-mono font-bold text-amber-300 border border-white/15 transition-all flex items-center gap-2 active:scale-95"
-                >
-                  <span>Watch on YouTube</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
-
-            {/* Interactive Chapter Timestamps */}
-            <div className="space-y-4 max-w-5xl mx-auto">
-              <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5" />
-                  <span>Documentary Chapters & Scientific Proofs</span>
-                </span>
-                <span className="text-xs font-mono text-gray-400">
-                  Click any chapter to inspect quantitative proofs
-                </span>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2.5">
-                {WHAT_IF_TYPE_III_VIDEO.chapters.map((chapter, idx) => {
-                  const isSelected = selectedChapterIndex === idx;
-                  return (
-                    <button
-                      key={chapter.timestamp}
-                      onClick={() => {
-                        soundManager.playClick();
-                        setSelectedChapterIndex(idx);
-                      }}
-                      className={`p-3 rounded-xl border text-left transition-all ${
-                        isSelected
-                          ? 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-lg shadow-amber-500/10'
-                          : 'bg-black/50 border-white/10 hover:border-white/25 hover:bg-white/5 text-gray-300'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-extrabold bg-black/60 border border-amber-500/30 text-amber-400">
-                          {chapter.timestamp}
-                        </span>
-                        <span className="text-[10px] font-mono text-gray-400">
-                          Part 0{idx + 1}
-                        </span>
-                      </div>
-                      <h5 className="text-xs font-serif font-bold text-white line-clamp-1">
-                        {chapter.title.split(':')[0]}
-                      </h5>
-                      <p className="text-[10.5px] font-mono text-gray-400 line-clamp-1 mt-0.5">
-                        {chapter.tagline}
-                      </p>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Selected Chapter Detail Card */}
-              {WHAT_IF_TYPE_III_VIDEO.chapters[selectedChapterIndex] && (
-                <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-[#1c130c] via-[#110c07] to-black border border-amber-500/40 shadow-xl space-y-4">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-white/10 pb-4">
-                    <div>
-                      <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest block">
-                        Chapter 0{selectedChapterIndex + 1} • {WHAT_IF_TYPE_III_VIDEO.chapters[selectedChapterIndex].timestamp}
-                      </span>
-                      <h3 className="text-xl sm:text-2xl font-serif font-black text-[#fde047] mt-0.5">
-                        {WHAT_IF_TYPE_III_VIDEO.chapters[selectedChapterIndex].title}
-                      </h3>
-                      <p className="text-xs sm:text-sm font-mono text-cyan-300 mt-1">
-                        {WHAT_IF_TYPE_III_VIDEO.chapters[selectedChapterIndex].tagline}
-                      </p>
+                {/* Floating Meta Bar under Video */}
+                <div className="p-4 sm:p-5 bg-gradient-to-r from-[#18110a] via-[#0f0c08] to-[#18110a] border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-400 shrink-0">
+                      <PlayCircle className="w-6 h-6" />
                     </div>
-
-                    <a
-                      href={`${WHAT_IF_TYPE_III_VIDEO.url}&t=${WHAT_IF_TYPE_III_VIDEO.chapters[selectedChapterIndex].seconds}s`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 text-xs font-mono font-bold flex items-center gap-2 self-start md:self-auto shrink-0 transition-all active:scale-95"
-                    >
-                      <PlayCircle className="w-4 h-4 text-amber-400" />
-                      <span>Jump to {WHAT_IF_TYPE_III_VIDEO.chapters[selectedChapterIndex].timestamp} in Video</span>
-                    </a>
+                    <div>
+                      <h4 className="text-sm font-serif font-bold text-white">
+                        {currentDocVideo.title}
+                      </h4>
+                      <span className="text-xs font-mono text-gray-400">
+                        Channel: {currentDocVideo.creator} • {activeDocVideo === 'type1' ? 'Planetary Energy & Fusion Mastery' : 'Kardashev Scale to Galactic Trajectory'}
+                      </span>
+                    </div>
                   </div>
 
-                  <p className="text-sm sm:text-base text-gray-200 font-sans leading-relaxed">
-                    {WHAT_IF_TYPE_III_VIDEO.chapters[selectedChapterIndex].description}
-                  </p>
+                  <a
+                    href={currentDocVideo.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-mono font-bold text-amber-300 border border-white/15 transition-all flex items-center gap-2 active:scale-95"
+                  >
+                    <span>Watch on YouTube</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </div>
 
-                  <div className="space-y-2 pt-2">
-                    <span className="text-xs font-mono font-bold text-gray-400 uppercase tracking-wider block">
-                      Core Scientific Proofs & Quantitative Facts:
-                    </span>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                      {WHAT_IF_TYPE_III_VIDEO.chapters[selectedChapterIndex].keyPoints.map((pt, pIdx) => (
-                        <div key={pIdx} className="p-3.5 rounded-xl bg-black/60 border border-white/10 flex items-start gap-2.5">
-                          <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-mono text-[10px] font-bold shrink-0 mt-0.5">
-                            {pIdx + 1}
+              {/* Interactive Chapter Timestamps */}
+              <div className="space-y-4 max-w-5xl mx-auto">
+                <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>Documentary Chapters & Scientific Proofs</span>
+                  </span>
+                  <span className="text-xs font-mono text-gray-400">
+                    Click any chapter to inspect quantitative proofs
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5">
+                  {currentChapters.map((chapter, idx) => {
+                    const isSelected = selectedChapterIndex === idx;
+                    return (
+                      <button
+                        key={chapter.timestamp}
+                        onClick={() => {
+                          soundManager.playClick();
+                          setSelectedChapterIndex(idx);
+                        }}
+                        className={`p-3 rounded-xl border text-left transition-all ${
+                          isSelected
+                            ? activeDocVideo === 'type1'
+                              ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-lg shadow-cyan-500/10'
+                              : 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-lg shadow-amber-500/10'
+                            : 'bg-black/50 border-white/10 hover:border-white/25 hover:bg-white/5 text-gray-300'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-extrabold bg-black/60 border border-white/15 text-amber-400">
+                            {chapter.timestamp}
                           </span>
-                          <span className="text-xs text-gray-300 font-serif leading-relaxed">
-                            {pt}
+                          <span className="text-[10px] font-mono text-gray-400">
+                            Part 0{idx + 1}
                           </span>
                         </div>
-                      ))}
+                        <h5 className="text-xs font-serif font-bold text-white line-clamp-1">
+                          {chapter.title.split(':')[0]}
+                        </h5>
+                        <p className="text-[10.5px] font-mono text-gray-400 line-clamp-1 mt-0.5">
+                          {chapter.tagline}
+                        </p>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Selected Chapter Detail Card */}
+                {activeChapter && (
+                  <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-[#1c130c] via-[#110c07] to-black border border-amber-500/40 shadow-xl space-y-4">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-white/10 pb-4">
+                      <div>
+                        <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest block">
+                          Chapter 0{selectedChapterIndex + 1} • {activeChapter.timestamp}
+                        </span>
+                        <h3 className="text-xl sm:text-2xl font-serif font-black text-[#fde047] mt-0.5">
+                          {activeChapter.title}
+                        </h3>
+                        <p className="text-xs sm:text-sm font-mono text-cyan-300 mt-1">
+                          {activeChapter.tagline}
+                        </p>
+                      </div>
+
+                      <a
+                        href={`${currentDocVideo.url}&t=${activeChapter.seconds}s`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 text-xs font-mono font-bold flex items-center gap-2 self-start md:self-auto shrink-0 transition-all active:scale-95"
+                      >
+                        <PlayCircle className="w-4 h-4 text-amber-400" />
+                        <span>Jump to {activeChapter.timestamp} in Video</span>
+                      </a>
+                    </div>
+
+                    <p className="text-sm sm:text-base text-gray-200 font-sans leading-relaxed">
+                      {activeChapter.description}
+                    </p>
+
+                    <div className="space-y-2 pt-2">
+                      <span className="text-xs font-mono font-bold text-gray-400 uppercase tracking-wider block">
+                        Core Scientific Proofs & Quantitative Facts:
+                      </span>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        {activeChapter.keyPoints.map((pt, pIdx) => (
+                          <div key={pIdx} className="p-3.5 rounded-xl bg-black/60 border border-white/10 flex items-start gap-2.5">
+                            <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-mono text-[10px] font-bold shrink-0 mt-0.5">
+                              {pIdx + 1}
+                            </span>
+                            <span className="text-xs text-gray-300 font-serif leading-relaxed">
+                              {pt}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-
-            {/* 3 High-Resolution Concept Cards & Infographics */}
-            <div className="space-y-6 max-w-5xl mx-auto pt-6">
-              <div className="text-center space-y-1.5">
-                <span className="text-xs font-mono font-bold text-[#e8913a] uppercase tracking-widest">
-                  ARCHITECTURAL INFOGRAPHICS • THREE TIERS OF ASCENT
-                </span>
-                <h3 className="text-2xl sm:text-4xl font-serif font-black text-[#efe6d6]">
-                  The Evolutionary Leaps of Kardashev Civilizations
-                </h3>
+                )}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Tier 1 Infographic Card */}
-                <div className="rounded-2xl border border-cyan-500/40 bg-gradient-to-b from-[#0a1824] via-[#071018] to-black p-6 space-y-4 shadow-xl flex flex-col justify-between">
-                  <div className="space-y-3">
-                    <div className="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-md">
-                      <Atom className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <span className="text-[10.5px] font-mono font-bold text-cyan-400 uppercase tracking-wider">
-                        TIER I: PLANETARY HARNESS (~10¹⁷ W)
-                      </span>
-                      <h4 className="text-lg font-serif font-bold text-white mt-0.5">
-                        AI Tokamaks & Weather Control
-                      </h4>
-                    </div>
-                    <p className="text-xs text-gray-300 font-serif leading-relaxed">
-                      Accelerated by Google DeepMind&apos;s GNoME (identifying 2.2M crystal structures in days) and UKAEA supercomputing tokamak plasma stabilization, humanity taps clean fusion while mastering planetary atmosphere and thermal dissipation.
-                    </p>
-                  </div>
-                  <div className="pt-3 border-t border-cyan-500/20 text-[11px] font-mono text-cyan-300 space-y-1">
-                    <div className="flex justify-between"><span>Baseline Earth:</span><span className="font-bold text-white">0.726 (2026)</span></div>
-                    <div className="flex justify-between"><span>Target Power:</span><span className="font-bold text-white">1.74 × 10¹⁷ W</span></div>
-                    <div className="flex justify-between"><span>Key Filter:</span><span className="font-bold text-white">Heat dissipation</span></div>
-                  </div>
-                </div>
-
-                {/* Tier 2 Infographic Card */}
-                <div className="rounded-2xl border border-amber-500/40 bg-gradient-to-b from-[#24170a] via-[#150f07] to-black p-6 space-y-4 shadow-xl flex flex-col justify-between">
-                  <div className="space-y-3">
-                    <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shadow-md">
-                      <Orbit className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <span className="text-[10.5px] font-mono font-bold text-amber-400 uppercase tracking-wider">
-                        TIER II: STELLAR SWARM (~3.8 × 10²⁶ W)
-                      </span>
-                      <h4 className="text-lg font-serif font-bold text-white mt-0.5">
-                        Dyson Swarms & Shkadov Thrusters
-                      </h4>
-                    </div>
-                    <p className="text-xs text-gray-300 font-serif leading-relaxed">
-                      Freeman Dyson&apos;s 1960 thesis realized: billions of orbital photovoltaic statites trap 100% of the Sun&apos;s photons. Asymmetric radiation pressure creates a Shkadov Thruster—steering the entire solar system through space while laser arrays harvest water from comets.
-                    </p>
-                  </div>
-                  <div className="pt-3 border-t border-amber-500/20 text-[11px] font-mono text-amber-300 space-y-1">
-                    <div className="flex justify-between"><span>Solar Luminosity:</span><span className="font-bold text-white">3.828 × 10²⁶ W</span></div>
-                    <div className="flex justify-between"><span>Stellar Engine:</span><span className="font-bold text-white">Shkadov Thruster</span></div>
-                    <div className="flex justify-between"><span>Resource Base:</span><span className="font-bold text-white">Mercury + Asteroids</span></div>
-                  </div>
-                </div>
-
-                {/* Tier 3 Infographic Card */}
-                <div className="rounded-2xl border border-purple-500/40 bg-gradient-to-b from-[#1c0d24] via-[#110717] to-black p-6 space-y-4 shadow-xl flex flex-col justify-between">
-                  <div className="space-y-3">
-                    <div className="w-12 h-12 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 shadow-md">
-                      <Sparkles className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <span className="text-[10.5px] font-mono font-bold text-purple-400 uppercase tracking-wider">
-                        TIER III: GALACTIC NET (~10³⁸ W)
-                      </span>
-                      <h4 className="text-lg font-serif font-bold text-white mt-0.5">
-                        Von Neumann Fleets & Hive-Minds
-                      </h4>
-                    </div>
-                    <p className="text-xs text-gray-300 font-serif leading-relaxed">
-                      Self-replicating Von Neumann robotic probe swarms land on dead moons, duplicate exponentially, and sweep across the 100,000 light-year Milky Way disc. Organic life gives way to post-biological minds acting as one integrated cosmic entity reaching toward Andromeda.
-                    </p>
-                  </div>
-                  <div className="pt-3 border-t border-purple-500/20 text-[11px] font-mono text-purple-300 space-y-1">
-                    <div className="flex justify-between"><span>Milky Way Stars:</span><span className="font-bold text-white">100–400 Billion</span></div>
-                    <div className="flex justify-between"><span>Traversal Span:</span><span className="font-bold text-white">100,000 Light-Years</span></div>
-                    <div className="flex justify-between"><span>Next Horizon:</span><span className="font-bold text-white">Andromeda Galaxy</span></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Vedic-Cosmology Harmonization */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#20150d] via-[#140e09] to-[#0d0906] border border-amber-500/30 shadow-2xl max-w-5xl mx-auto space-y-4">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">🕉️</span>
-                <div>
-                  <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">
-                    RIGVEDA & PURANIC SYNTHESIS • ब्रह्मज्ञान
+              {/* 3 High-Resolution Concept Cards & Infographics */}
+              <div className="space-y-6 max-w-5xl mx-auto pt-6">
+                <div className="text-center space-y-1.5">
+                  <span className="text-xs font-mono font-bold text-[#e8913a] uppercase tracking-widest">
+                    ARCHITECTURAL INFOGRAPHICS • {activeDocVideo === 'type1' ? 'TYPE I PLANETARY HARNESS' : 'THREE TIERS OF ASCENT'}
                   </span>
-                  <h4 className="text-xl font-serif font-bold text-[#fde047]">
-                    From Nasadiya Sukta to Galactic Super-Beings
-                  </h4>
+                  <h3 className="text-2xl sm:text-4xl font-serif font-black text-[#efe6d6]">
+                    {activeDocVideo === 'type1' ? 'Physics & Engineering of a Planetary Civilization' : 'The Evolutionary Leaps of Kardashev Civilizations'}
+                  </h3>
                 </div>
+
+                {activeDocVideo === 'type1' ? (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* PBS Space Time Card 1 */}
+                    <div className="rounded-2xl border border-cyan-500/40 bg-gradient-to-b from-[#0a1824] via-[#071018] to-black p-6 space-y-4 shadow-xl flex flex-col justify-between">
+                      <div className="space-y-3">
+                        <div className="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-md">
+                          <Atom className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <span className="text-[10.5px] font-mono font-bold text-cyan-400 uppercase tracking-wider">
+                            SOLAR IRRADIANCE INTERCEPT (~1.74 × 10¹⁷ W)
+                          </span>
+                          <h4 className="text-lg font-serif font-bold text-white mt-0.5">
+                            The 174-Petawatt Photonic Disk
+                          </h4>
+                        </div>
+                        <p className="text-xs text-gray-300 font-serif leading-relaxed">
+                          Solar flux at 1 AU is 1,361 W/m². Across the projected cross-section of Earth (π R⊕² with R⊕ = 6,371 km), our planet continuously absorbs 1.74 × 10¹⁷ W. Single-junction silicon cells are capped at ~33.7% by the Shockley-Queisser limit, making Space-Based Solar Power (SBSP) in GEO essential for 24/7 unthrottled generation.
+                        </p>
+                      </div>
+                      <div className="pt-3 border-t border-cyan-500/20 text-[11px] font-mono text-cyan-300 space-y-1">
+                        <div className="flex justify-between"><span>Solar Irradiance:</span><span className="font-bold text-white">1,361 W/m²</span></div>
+                        <div className="flex justify-between"><span>Total Solar Budget:</span><span className="font-bold text-white">174 Petawatts</span></div>
+                        <div className="flex justify-between"><span>Transmission:</span><span className="font-bold text-white">2.45 GHz Microwave Rectennas</span></div>
+                      </div>
+                    </div>
+
+                    {/* PBS Space Time Card 2 */}
+                    <div className="rounded-2xl border border-amber-500/40 bg-gradient-to-b from-[#24170a] via-[#150f07] to-black p-6 space-y-4 shadow-xl flex flex-col justify-between">
+                      <div className="space-y-3">
+                        <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shadow-md">
+                          <Flame className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <span className="text-[10.5px] font-mono font-bold text-amber-400 uppercase tracking-wider">
+                            OCEAN DEUTERIUM FUSION RESERVES
+                          </span>
+                          <h4 className="text-lg font-serif font-bold text-white mt-0.5">
+                            Tokamaks & Artificial Mini-Suns
+                          </h4>
+                        </div>
+                        <p className="text-xs text-gray-300 font-serif leading-relaxed">
+                          Earth&apos;s oceans contain over 4 × 10¹⁶ kg of Deuterium. Fusing Deuterium with Tritium (²H + ³H → ⁴He + n + 17.6 MeV) in magnetic confinement Tokamaks (like ITER & SPARC) produces millions of times more energy per kilogram than coal, providing humanity with a multi-billion-year fuel reservoir.
+                        </p>
+                      </div>
+                      <div className="pt-3 border-t border-amber-500/20 text-[11px] font-mono text-amber-300 space-y-1">
+                        <div className="flex justify-between"><span>Ocean Deuterium:</span><span className="font-bold text-white">4 × 10¹⁶ kg</span></div>
+                        <div className="flex justify-between"><span>Core Reaction:</span><span className="font-bold text-white">D-T (17.6 MeV)</span></div>
+                        <div className="flex justify-between"><span>Plasma Temp:</span><span className="font-bold text-white">150,000,000 °C</span></div>
+                      </div>
+                    </div>
+
+                    {/* PBS Space Time Card 3 */}
+                    <div className="rounded-2xl border border-rose-500/40 bg-gradient-to-b from-[#240a12] via-[#18070c] to-black p-6 space-y-4 shadow-xl flex flex-col justify-between">
+                      <div className="space-y-3">
+                        <div className="w-12 h-12 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 shadow-md">
+                          <Shield className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <span className="text-[10.5px] font-mono font-bold text-rose-400 uppercase tracking-wider">
+                            THE 2ND LAW OF THERMODYNAMICS
+                          </span>
+                          <h4 className="text-lg font-serif font-bold text-white mt-0.5">
+                            YBCO Grid & The Heat Trap
+                          </h4>
+                        </div>
+                        <p className="text-xs text-gray-300 font-serif leading-relaxed">
+                          Petawatts of power are distributed without dissipation through underground YBCO (Yttrium Barium Copper Oxide) high-temperature superconducting cables. However, all energy consumed ultimately degrades into ambient waste heat. Releasing 10¹⁷ W on Earth triggers a runaway Heat Trap unless space radiators or orbital sunshades are deployed.
+                        </p>
+                      </div>
+                      <div className="pt-3 border-t border-rose-500/20 text-[11px] font-mono text-rose-300 space-y-1">
+                        <div className="flex justify-between"><span>Superconductor:</span><span className="font-bold text-white">YBCO (77 K Liquid N₂)</span></div>
+                        <div className="flex justify-between"><span>Dissipation:</span><span className="font-bold text-white">0% Resistance Losses</span></div>
+                        <div className="flex justify-between"><span>Existential Risk:</span><span className="font-bold text-white">Thermal Equilibrium Rise</span></div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Tier 1 Infographic Card */}
+                    <div className="rounded-2xl border border-cyan-500/40 bg-gradient-to-b from-[#0a1824] via-[#071018] to-black p-6 space-y-4 shadow-xl flex flex-col justify-between">
+                      <div className="space-y-3">
+                        <div className="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-md">
+                          <Atom className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <span className="text-[10.5px] font-mono font-bold text-cyan-400 uppercase tracking-wider">
+                            TIER I: PLANETARY HARNESS (~10¹⁷ W)
+                          </span>
+                          <h4 className="text-lg font-serif font-bold text-white mt-0.5">
+                            AI Tokamaks & Weather Control
+                          </h4>
+                        </div>
+                        <p className="text-xs text-gray-300 font-serif leading-relaxed">
+                          Accelerated by Google DeepMind&apos;s GNoME (identifying 2.2M crystal structures in days) and UKAEA supercomputing tokamak plasma stabilization, humanity taps clean fusion while mastering planetary atmosphere and thermal dissipation.
+                        </p>
+                      </div>
+                      <div className="pt-3 border-t border-cyan-500/20 text-[11px] font-mono text-cyan-300 space-y-1">
+                        <div className="flex justify-between"><span>Baseline Earth:</span><span className="font-bold text-white">0.726 (2026)</span></div>
+                        <div className="flex justify-between"><span>Target Power:</span><span className="font-bold text-white">1.74 × 10¹⁷ W</span></div>
+                        <div className="flex justify-between"><span>Key Filter:</span><span className="font-bold text-white">Heat dissipation</span></div>
+                      </div>
+                    </div>
+
+                    {/* Tier 2 Infographic Card */}
+                    <div className="rounded-2xl border border-amber-500/40 bg-gradient-to-b from-[#24170a] via-[#150f07] to-black p-6 space-y-4 shadow-xl flex flex-col justify-between">
+                      <div className="space-y-3">
+                        <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shadow-md">
+                          <Orbit className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <span className="text-[10.5px] font-mono font-bold text-amber-400 uppercase tracking-wider">
+                            TIER II: STELLAR SWARM (~3.8 × 10²⁶ W)
+                          </span>
+                          <h4 className="text-lg font-serif font-bold text-white mt-0.5">
+                            Dyson Swarms & Shkadov Thrusters
+                          </h4>
+                        </div>
+                        <p className="text-xs text-gray-300 font-serif leading-relaxed">
+                          Freeman Dyson&apos;s 1960 thesis realized: billions of orbital photovoltaic statites trap 100% of the Sun&apos;s photons. Asymmetric radiation pressure creates a Shkadov Thruster—steering the entire solar system through space while laser arrays harvest water from comets.
+                        </p>
+                      </div>
+                      <div className="pt-3 border-t border-amber-500/20 text-[11px] font-mono text-amber-300 space-y-1">
+                        <div className="flex justify-between"><span>Solar Luminosity:</span><span className="font-bold text-white">3.828 × 10²⁶ W</span></div>
+                        <div className="flex justify-between"><span>Stellar Engine:</span><span className="font-bold text-white">Shkadov Thruster</span></div>
+                        <div className="flex justify-between"><span>Resource Base:</span><span className="font-bold text-white">Mercury + Asteroids</span></div>
+                      </div>
+                    </div>
+
+                    {/* Tier 3 Infographic Card */}
+                    <div className="rounded-2xl border border-purple-500/40 bg-gradient-to-b from-[#1c0d24] via-[#110717] to-black p-6 space-y-4 shadow-xl flex flex-col justify-between">
+                      <div className="space-y-3">
+                        <div className="w-12 h-12 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 shadow-md">
+                          <Sparkles className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <span className="text-[10.5px] font-mono font-bold text-purple-400 uppercase tracking-wider">
+                            TIER III: GALACTIC NET (~10³⁸ W)
+                          </span>
+                          <h4 className="text-lg font-serif font-bold text-white mt-0.5">
+                            Von Neumann Fleets & Hive-Minds
+                          </h4>
+                        </div>
+                        <p className="text-xs text-gray-300 font-serif leading-relaxed">
+                          Self-replicating Von Neumann robotic probe swarms land on dead moons, duplicate exponentially, and sweep across the 100,000 light-year Milky Way disc. Organic life gives way to post-biological minds acting as one integrated cosmic entity reaching toward Andromeda.
+                        </p>
+                      </div>
+                      <div className="pt-3 border-t border-purple-500/20 text-[11px] font-mono text-purple-300 space-y-1">
+                        <div className="flex justify-between"><span>Milky Way Stars:</span><span className="font-bold text-white">100–400 Billion</span></div>
+                        <div className="flex justify-between"><span>Traversal Span:</span><span className="font-bold text-white">100,000 Light-Years</span></div>
+                        <div className="flex justify-between"><span>Next Horizon:</span><span className="font-bold text-white">Andromeda Galaxy</span></div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-              <p className="text-xs sm:text-sm text-gray-300 font-serif leading-relaxed">
-                Thousands of years before Kardashev or Freeman Dyson, the <em>Rigveda</em> (Nasadiya Sukta 10.129) questioned: <em>&ldquo;Who really knows? Who will here proclaim it? Whence was it produced? Whence is this creation?&rdquo;</em> Similarly, the <em>Bhagavata Purana (3.11)</em> envisioned millions of distinct cosmic eggs (Brahmandas) drifting like microscopic specks of dust within the breath of Maha-Vishnu. A Type III civilization realizes in physical engineering what ancient rishis grasped through direct contemplative vision: that intelligence and the universe are an inseparable, self-unfolding continuum.
-              </p>
+
+              {/* Vedic-Cosmology Harmonization */}
+              <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#20150d] via-[#140e09] to-[#0d0906] border border-amber-500/30 shadow-2xl max-w-5xl mx-auto space-y-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🕉️</span>
+                  <div>
+                    <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">
+                      RIGVEDA & PURANIC SYNTHESIS • ब्रह्मज्ञान
+                    </span>
+                    <h4 className="text-xl font-serif font-bold text-[#fde047]">
+                      {activeDocVideo === 'type1' ? 'Agni, Surya & The Planetary Energy Grid' : 'From Nasadiya Sukta to Galactic Super-Beings'}
+                    </h4>
+                  </div>
+                </div>
+                <p className="text-xs sm:text-sm text-gray-300 font-serif leading-relaxed">
+                  {activeDocVideo === 'type1' ? (
+                    <>
+                      The <em>Rigveda</em> opens with <em>&ldquo;Agnim īḷe purohitam&rdquo;</em> (I venerate Agni, the cosmic fire and prime energy mover). In Vedic cosmology, <em>Sūrya</em> (the Sun) is <em>&ldquo;Ātmā jagatas tasthuṣaś ca&rdquo;</em> (the soul and animator of all that moves and stands still). Mastering Type I energy is not merely an engineering triumph—it is the conscious realization of humanity becoming the responsible caretaker (*Purohita*) of the planetary energy body (*Bhū-Devī*), balancing solar fire with terrestrial harmony.
+                    </>
+                  ) : (
+                    <>
+                      Thousands of years before Kardashev or Freeman Dyson, the <em>Rigveda</em> (Nasadiya Sukta 10.129) questioned: <em>&ldquo;Who really knows? Who will here proclaim it? Whence was it produced? Whence is this creation?&rdquo;</em> Similarly, the <em>Bhagavata Purana (3.11)</em> envisioned millions of distinct cosmic eggs (Brahmandas) drifting like microscopic specks of dust within the breath of Maha-Vishnu. A Type III civilization realizes in physical engineering what ancient rishis grasped through direct contemplative vision: that intelligence and the universe are an inseparable, self-unfolding continuum.
+                    </>
+                  )}
+                </p>
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* ================= TAB 3: FERMI PARADOX & DRAKE EQUATION ================= */}
         {activeTab === 'fermi' && (

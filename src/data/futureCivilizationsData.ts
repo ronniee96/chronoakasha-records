@@ -115,6 +115,91 @@ export const WHAT_IF_TYPE_III_VIDEO = {
   ]
 };
 
+export const PBS_SPACETIME_TYPE_I_VIDEO = {
+  videoId: 'hRXAbMe_THw',
+  title: 'How Can Humanity Become a Kardashev Type 1 Civilization?',
+  creator: 'PBS Space Time',
+  host: 'Dr. Matt O\'Dowd',
+  url: 'https://youtu.be/hRXAbMe_THw',
+  embedUrl: 'https://www.youtube.com/embed/hRXAbMe_THw',
+  thumbnailUrl: 'https://i.ytimg.com/vi/hRXAbMe_THw/hqdefault.jpg',
+  synopsis: 'Astrophysicist Dr. Matt O\'Dowd breaks down the rigorous physics required to reach Kardashev Type I: calculating Earth\'s exact 174-Petawatt solar constant, bypassing the Shockley-Queisser limit with Space-Based Solar Power (SBSP), tapping ocean Deuterium via Tokamak fusion, laying YBCO superconducting global grids, and surviving the existential Thermodynamic Heat Trap.',
+  chapters: [
+    {
+      timestamp: '00:00',
+      seconds: 0,
+      title: 'The 1964 Kardashev Origin',
+      tagline: 'Alien Broadcast Detectability & The Sagan Energy Metric',
+      description: 'Soviet astrophysicist Nikolai Kardashev originally formulated his three-tier energy metric in 1964 to calculate how far an alien radio transmission could penetrate cosmic noise before decaying. Carl Sagan modernized it into a smooth logarithmic formula: K = (log10(P) - 6) / 10.',
+      keyPoints: [
+        'Baseline: Modern humanity commands ~1.8 × 10¹³ W (~0.726 on the Sagan scale).',
+        'Type I requires mastering ~10¹⁷ W—all solar flux striking the Earth plus global artificial fusion.',
+        'Kardashev\'s metric fundamentally measures a species\' command over thermodynamic degrees of freedom.'
+      ]
+    },
+    {
+      timestamp: '04:08',
+      seconds: 248,
+      title: 'The Solar Constant & 174 Petawatts',
+      tagline: 'Earth\'s Projected Cross-Sectional Solar Allowance',
+      description: 'Solar irradiance at Earth\'s orbital radius (1 AU) is 1,361 W/m². Intercepted across the circular cross-section of Earth\'s disk (π R⊕² with R⊕ ≈ 6,371 km), our planet continuously absorbs precisely 1.74 × 10¹⁷ Watts (174 Petawatts).',
+      keyPoints: [
+        'Earth\'s total continuous solar budget is 1.74 × 10¹⁷ W, our celestial energy allowance.',
+        'Terrestrial solar is throttled by night cycles, oblique incident angles, cloud cover, and atmospheric scattering.',
+        'Even covering huge land areas with silicon panels leaves modern civilizations orders of magnitude short of Type I.'
+      ]
+    },
+    {
+      timestamp: '06:09',
+      seconds: 369,
+      title: 'Shockley-Queisser Limit & Space Solar',
+      tagline: 'Bypassing the Silicon Bottleneck via Orbital Microwave Beams',
+      description: 'The fundamental Shockley-Queisser limit caps single-junction silicon solar cells at ~33.7% theoretical efficiency. To overcome night and clouds, humanity must deploy Space-Based Solar Power (SBSP) satellites in Geostationary Orbit (GEO).',
+      keyPoints: [
+        'Single-junction photovoltaic cells lose energy from sub-bandgap photons and thermalization.',
+        'Space-based solar satellites in GEO operate in permanent 24/7 sunlight, generating 10x to 20x more energy per unit area.',
+        'Power is converted to high-frequency microwaves (2.45 GHz) or infrared lasers and beamed safely to ground-based rectenna grids.'
+      ]
+    },
+    {
+      timestamp: '10:14',
+      seconds: 614,
+      title: 'Artificial Fusion: Building Mini-Suns',
+      tagline: 'Tapping Ocean Deuterium via Tokamak Magnetic Confinement',
+      description: 'Rather than passively waiting for starlight to fall onto Earth, a Type I civilization manufactures its own mini-suns. Controlled thermonuclear fusion merges hydrogen isotopes into helium, releasing millions of times more energy per gram than chemical combustion.',
+      keyPoints: [
+        'Deuterium-Tritium reaction: ²H + ³H → ⁴He + n + 17.6 MeV.',
+        'Earth\'s oceans contain over 4 × 10¹⁶ kg of Deuterium—enough fuel to supply a full Type I civilization for billions of years.',
+        'Tokamak magnetic confinement (ITER, SPARC, UKAEA) isolates 150,000,000°C plasma using superconducting magnetic bottles.'
+      ]
+    },
+    {
+      timestamp: '14:20',
+      seconds: 860,
+      title: 'Superconducting Global Grid & YBCO',
+      tagline: 'Zero-Dissipation Continental Power Transmission',
+      description: 'Tapping Petawatts of energy requires an infrastructure that will not melt under extreme current densities. High-temperature superconductors like YBCO (Yttrium Barium Copper Oxide) cooled with liquid nitrogen transmit terawatts without electrical resistance.',
+      keyPoints: [
+        'Conventional copper/aluminum cables suffer I²R resistive heating and huge losses over thousands of miles.',
+        'Underground YBCO superconducting cables achieve zero resistance, allowing frictionless transmission of fusion and solar power globally.',
+        'A globally interconnected smart grid balances diurnal load spikes across daylight and nighttime hemispheres.'
+      ]
+    },
+    {
+      timestamp: '16:20',
+      seconds: 980,
+      title: 'Atmospheric Mastery & The Heat Trap Paradox',
+      tagline: 'Weather Engineering & The Thermodynamic Boundary',
+      description: 'Commanding 10¹⁷ W gives humanity the exact energetic muscle of Earth\'s atmosphere and oceans: neutralizing hurricanes, routing rain, and preventing ice ages. But the Second Law of Thermodynamics creates the ultimate bottleneck: the Heat Trap.',
+      keyPoints: [
+        'Energetic parity: category 5 hurricanes release ~10¹⁴ W; a Type I civilization can easily tame atmospheric storms.',
+        'The Heat Trap: All energy consumed eventually dissipates as heat. Releasing 10¹⁷ W on Earth raises surface temperatures catastrophically unless radiated into space.',
+        'To survive Type I, humanity must deploy orbital solar deflectors or gigantic space-based infrared radiative cooling arrays.'
+      ]
+    }
+  ]
+};
+
 export const KARDASHEV_SCALE: KardashevType[] = [
   {
     type: 'Type 0',
