@@ -1263,3 +1263,174 @@ export const APERTURE_DIMENSIONAL_GODHOOD: DimensionalGodhoodTheoryData = {
     philosophicalResolution: 'When Arjuna was shown the Viśvarūpa, Sri Krishna explicitly granted him "Divyaṁ Cakṣuḥ" (the divine eye)—which in modern theoretical physics is nothing other than higher-dimensional perception. Arjuna saw the past, present, and future warriors already slain simultaneously in the Block Universe. Thus, modern dimensional physics and ancient Vedic metaphysics arrive at the exact same conclusion: human beings are not insignificant dust specks, but divine consciousness veiled in a 3D avatar, destined through the Kalachakra cycle to awaken as the Supreme Witness.'
   }
 };
+
+export interface FourthDimensionChapter {
+  timestamp: string;
+  seconds: number;
+  title: string;
+  tagline: string;
+  description: string;
+  keyPoints: string[];
+}
+
+export interface FourthDimensionPower {
+  id: string;
+  name: string;
+  sanskritName: string;
+  category: 'Spatial' | 'Temporal' | 'Perceptual' | 'Transcendental';
+  description: string;
+  flatlandAnalogy: string;
+  physicalMechanism: string;
+  vedicParallel: string;
+}
+
+export interface FourthDimensionVideoData {
+  videoId: string;
+  title: string;
+  creator: string;
+  url: string;
+  embedUrl: string;
+  thumbnailUrl: string;
+  synopsis: string;
+  chapters: FourthDimensionChapter[];
+  superbeingPowers: FourthDimensionPower[];
+}
+
+export const WHAT_IF_4TH_DIMENSION_VIDEO: FourthDimensionVideoData = {
+  videoId: 'RaXQhSRh2jQ',
+  title: 'What If You Could See the 4th Dimension?',
+  creator: 'What If Science Show',
+  url: 'https://youtu.be/RaXQhSRh2jQ',
+  embedUrl: 'https://www.youtube.com/embed/RaXQhSRh2jQ',
+  thumbnailUrl: 'https://i.ytimg.com/vi/RaXQhSRh2jQ/hqdefault.jpg',
+  synopsis: 'Transforming into a 4-dimensional superbeing grants powers that surpass ancient mythological gods: melting through solid steel bank vault doors, viewing all interior organs of a human body simultaneously, surgically excising tumors without an incision, and traversing cosmic spacetime like a landscape.',
+  chapters: [
+    {
+      timestamp: '00:00',
+      seconds: 0,
+      title: 'The 4D Superbeing Fantasy',
+      tagline: 'Transcending the Gods of Antiquity',
+      description: 'Walking through solid 3D bank vaults, observing the interior of any sealed container, surgically excising tumors without incisions, and navigating cosmological time.',
+      keyPoints: [
+        'In 4D space, 3D enclosures have zero coverage in the fourth coordinate (W-axis / Ana and Kata).',
+        'An entity with 4 spatial degrees of freedom makes mythological gods like Zeus look like two-dimensional line drawings.',
+        'Complete mastery over volume, interiors, and temporal duration.'
+      ]
+    },
+    {
+      timestamp: '02:30',
+      seconds: 150,
+      title: 'The Dimensional Ladder: 0D Point to 2D Flatland',
+      tagline: 'From Primordial Bindu to Planar Confinement',
+      description: 'Exploring 0D (a dimensionless mathematical point), 1D (a line where objects can only move forward and backward), and 2D Flatland (where circles appear as 1D line segments to their inhabitants).',
+      keyPoints: [
+        '0D Point: No space, no size, zero displacement (the Vedic Bindu).',
+        '1D Line: Degrees of freedom = 1 (x). Entrapment by any neighboring point.',
+        '2D Flatland: A 2D circle appears only as a line segment to flatlanders; only a 3D observer looking from above sees its true circular interior.'
+      ]
+    },
+    {
+      timestamp: '06:00',
+      seconds: 360,
+      title: 'The 3D Upgrade & Dimensional Shadows',
+      tagline: 'How Higher Dimensions Manifest in Lower Worlds',
+      description: 'The addition of depth (z). When a 3D sphere passes through a 2D plane, flatlanders see a point that grows into a circle, shrinks, and vanishes. Similarly, a 4D hypersphere passing through a 3D room appears as a morphing, floating 3D sphere.',
+      keyPoints: [
+        'Lower dimensions only perceive cross-sections of higher-dimensional entities.',
+        'A 3D apple passing through Flatland manifests as expanding and contracting 2D disks.',
+        'A 4D hypercube (Tesseract) casts a 3D shadow with 8 cubical cells and 24 square faces.'
+      ]
+    },
+    {
+      timestamp: '09:00',
+      seconds: 540,
+      title: 'The 4th Dimension as Spacetime',
+      tagline: 'Einstein, Minkowski, and the Flow of Duration',
+      description: 'In modern physics, time is unified with space into 4D Minkowski spacetime (x, y, z, ct). Gravitational time dilation near black holes allows extreme forward time travel.',
+      keyPoints: [
+        'General Relativity unites 3 spatial axes and 1 temporal coordinate into a flexible pseudo-Riemannian manifold.',
+        'Orbiting close to a supermassive black hole: 1 hour for the traveler = thousands of years on Earth.',
+        'Thermodynamic entropy (dS >= 0) dictates the perceptual forward arrow of time for biological beings.'
+      ]
+    },
+    {
+      timestamp: '13:20',
+      seconds: 800,
+      title: 'The Block Universe & Grandfather Paradoxes',
+      tagline: 'Eternalism: All Moments Exist at Once',
+      description: 'In the Block Universe (Eternalism), the past, present, and future all exist simultaneously. A human life is a continuous 4D space-time worm stretching from birth to death.',
+      keyPoints: [
+        'Past and future are not gone or yet to come; they are simply distinct spatial locations along the time coordinate.',
+        'Novikov Self-Consistency Principle vs Many-Worlds Quantum Branching for time travelers.',
+        'The illusion of flow: We only feel time moving because our brains store memories of lower entropy states.'
+      ]
+    },
+    {
+      timestamp: '18:20',
+      seconds: 1100,
+      title: 'Spatial 4th Dimension & Non-Invasive Medicine',
+      tagline: 'Walking Through Walls and Incisionless Surgery',
+      description: 'If the 4th dimension is spatial (W-axis / Ana and Kata), a 4D superbeing looks directly into every 3D human body. Skin, bones, and organs are completely visible and unoccluded.',
+      keyPoints: [
+        'A 3D sealed bank vault has no roof in the 4th spatial direction; a 4D entity simply reaches down into it.',
+        'Non-invasive 4D surgery: You reach into a patient abdomen along the W-axis and remove a tumor without slicing open skin or tissue.',
+        'A 3D jail cell cannot contain a 4D person; they simply step into the 4th coordinate and step back into 3D space outside the cell.'
+      ]
+    },
+    {
+      timestamp: '23:20',
+      seconds: 1400,
+      title: 'Beyond 4D: Calabi-Yau, String Theory & 11D Multiverse',
+      tagline: 'Vibrating Strings, M-Theory, and Cosmic Unity',
+      description: 'Above 4D, space curls into subatomic Planck-scale geometries. Superstring theory and 11D M-Theory require compactified Calabi-Yau manifolds to unify gravity with quantum mechanics.',
+      keyPoints: [
+        '6 extra spatial dimensions are curled up into Calabi-Yau manifolds at the Planck length (10^-35 m).',
+        'At the 11th dimension (M-Theory bulk), all possible universes, physical laws, and quantum realities are accessible.',
+        'Reaching the top of the dimensional ladder dissolves individual ego into the fabric of the universe (Aham Brahmasmi).'
+      ]
+    }
+  ],
+  superbeingPowers: [
+    {
+      id: 'vault-bypass',
+      name: 'The 3D Vault Bypass (Ana/Kata Navigation)',
+      sanskritName: 'अणिमा एवं लघिमा • Aṇimā & Laghimā Siddhi',
+      category: 'Spatial',
+      description: 'Stepping into the 4th spatial coordinate (W-axis) allows bypassing solid 3D barriers without touching or unlocking them.',
+      flatlandAnalogy: 'Just as a 3D person picks a coin up off a piece of paper over a drawn locked square, a 4D being lifts objects out of sealed 3D vaults.',
+      physicalMechanism: 'Rotation into the orthogonal W-direction (Ana/Kata), rendering 3D bounding boxes completely open from the 4th axis.',
+      vedicParallel: 'The Laghimā and Aṇimā Siddhis described in Patañjali Yoga Sūtras, where the yogi moves beyond gross physical obstructions.'
+    },
+    {
+      id: 'non-invasive-surgery',
+      name: 'Non-Invasive 4D Internal Surgery',
+      sanskritName: 'दिव्य दृष्टि एवं काया सिद्धि • Divya Dṛṣṭi',
+      category: 'Perceptual',
+      description: 'All 3D interiors are laid bare to a 4D observer without occlusion. Organs, blood vessels, and tumors can be extracted directly without cutting outer skin.',
+      flatlandAnalogy: 'Looking down at a 2D Flatlander reveals their heart, stomach, and digestive tract all at once, accessible from above without puncturing their boundary line.',
+      physicalMechanism: 'Zero occlusion: 3D surfaces do not obscure 3D interiors when viewed along the 4th spatial dimension.',
+      vedicParallel: 'Divya Chakshu (Divine Vision) granted to Sanjaya and Arjuna, perceiving all inner and outer realities simultaneously.'
+    },
+    {
+      id: 'morphing-shadows',
+      name: 'The Morphing Hypersphere & Tesseract Shadow',
+      sanskritName: 'मायावी रूप • Māyāvī Rūpa (Cosmic Shapeshifting)',
+      category: 'Spatial',
+      description: 'When a 4D object traverses 3D space, humans only observe its 3D cross-sections: a sphere that suddenly appears out of nowhere, swells, morphs, and vanishes.',
+      flatlandAnalogy: 'An apple passing through Flatland appears to 2D creatures as an expanding point that becomes a circle, then a smaller circle, then vanishes.',
+      physicalMechanism: 'Projection of a 4-polytope (Tesseract) or 4-sphere into R3 Euclidean space, yielding time-varying 3D geometric cross-sections.',
+      vedicParallel: 'Māyā—the cosmic projection where the infinite multidimensional truth appears as transient, shifting forms to mortal senses.'
+    },
+    {
+      id: 'block-universe',
+      name: 'The Block Universe & Time-Slit Omniscience',
+      sanskritName: 'त्रिकालदर्शिता • Trikāladarśitā (Past, Present & Future as One)',
+      category: 'Temporal',
+      description: 'Seeing all moments of cosmic history—ancient Egypt building pyramids, modern life, and the heat death of stars—as an eternally existing static sculpture.',
+      flatlandAnalogy: 'Seeing all frames of a film strip laid out side-by-side on a light table, rather than watching them one by one through a projector lens.',
+      physicalMechanism: 'Minkowski metric ds^2 = -c^2 dt^2 + dx^2 + dy^2 + dz^2 treating time as a persistent spatial-like coordinate in 4D spacetime.',
+      vedicParallel: 'Bhagavad Gītā 11.32: Sri Krishna displaying the Viśvarūpa, where all warriors of the future are already fallen in battle before the first arrow is loosed.'
+    }
+  ]
+};
+

@@ -4,12 +4,16 @@ import React, { useState } from 'react';
 import { 
   X, Atom, Dna, Flame, Globe, Rocket, Compass, BookOpen, 
   ChevronRight, Sparkles, Layers, ShieldCheck, Zap, Maximize2,
-  Eye, Skull, ShieldAlert, ExternalLink, Play, Infinity as InfinityIcon, CheckCircle2, Video
+  Eye, Skull, ShieldAlert, ExternalLink, Play, Infinity as InfinityIcon, CheckCircle2, Video,
+  Film, PlayCircle, Clock
 } from 'lucide-react';
 import { 
   EVOLUTION_FUTURE_STAGES, 
   ScientificStage, 
-  APERTURE_DIMENSIONAL_GODHOOD 
+  APERTURE_DIMENSIONAL_GODHOOD,
+  WHAT_IF_4TH_DIMENSION_VIDEO,
+  FourthDimensionChapter,
+  FourthDimensionPower
 } from '../data/evolutionAndFutureData';
 import { formatMathEquation } from '../data/dysonClusterData';
 import { MathEquation } from './MathEquation';
@@ -29,9 +33,11 @@ export function EvolutionChakraModal({
   onSelectYearOnWheel,
 }: EvolutionChakraModalProps) {
   const [selectedStageIndex, setSelectedStageIndex] = useState<number>(0);
-  const [activeTab, setActiveTab] = useState<'physics' | 'chemistry' | 'biology' | 'dimensions' | 'requirements' | 'vedic' | 'aperture_godhood'>('physics');
+  const [activeTab, setActiveTab] = useState<'physics' | 'chemistry' | 'biology' | 'dimensions' | 'requirements' | 'vedic' | 'aperture_godhood' | 'whatif_4d'>('whatif_4d');
   const [selectedDimIndex, setSelectedDimIndex] = useState<number>(4); // defaults to 4D Tesseract
   const [activeGodhoodSubTab, setActiveGodhoodSubTab] = useState<'ladder' | 'mechanisms' | 'consequences' | 'apotheosis'>('ladder');
+  const [selected4DChapterIdx, setSelected4DChapterIdx] = useState<number>(0);
+  const [selectedPowerId, setSelectedPowerId] = useState<string>('vault-bypass');
 
   if (!isOpen) return null;
 
@@ -63,6 +69,22 @@ export function EvolutionChakraModal({
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                soundManager.bell(1046.5, 0.2, 1.8);
+                setActiveTab('whatif_4d');
+              }}
+              className={`h-7 px-2.5 rounded-full text-[10.5px] font-serif font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-sm ${
+                activeTab === 'whatif_4d'
+                  ? 'bg-gradient-to-r from-rose-500 to-amber-600 text-white border border-rose-300 shadow-[0_0_12px_rgba(244,63,94,0.5)]'
+                  : 'bg-rose-500/15 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30 hover:text-white'
+              }`}
+            >
+              <Film className="w-3 h-3 text-rose-400" />
+              <span className="hidden sm:inline">What If:</span>
+              <span>4th Dimension</span>
+            </button>
+
             <button
               onClick={() => {
                 soundManager.bell(1046.5, 0.2, 1.8);
@@ -196,6 +218,7 @@ export function EvolutionChakraModal({
             {/* NAVIGATION TABS */}
             <div className="flex items-center gap-1 p-2 border-b border-[rgba(232,145,58,0.18)] bg-[#0d0905] overflow-x-auto no-scrollbar">
               {[
+                { id: 'whatif_4d', label: '🎬 What If 4D Theater', icon: Film, isRose: true },
                 { id: 'physics', label: 'Physics & Equations', icon: Atom },
                 { id: 'chemistry', label: 'Chemistry & Reactions', icon: Flame },
                 { id: 'biology', label: 'Biology & Cognition', icon: Dna },
@@ -207,6 +230,7 @@ export function EvolutionChakraModal({
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
                 const isSpecial = tab.id === 'aperture_godhood';
+                const isRose = (tab as any).isRose;
                 return (
                   <button
                     key={tab.id}
@@ -216,9 +240,13 @@ export function EvolutionChakraModal({
                     }}
                     className={`h-8 px-3 rounded-[6px] text-xs font-serif font-medium whitespace-nowrap transition-all flex items-center gap-1.5 shrink-0 ${
                       isActive 
-                        ? isSpecial
+                        ? isRose
+                          ? 'bg-gradient-to-r from-rose-500 to-amber-600 text-white font-bold shadow-[0_0_12px_rgba(244,63,94,0.4)] border border-rose-300/40'
+                          : isSpecial
                           ? 'bg-gradient-to-r from-[#a855f7] to-[#7e22ce] text-white font-bold shadow-[0_0_12px_rgba(168,85,247,0.4)] border border-[#e9d5ff]/40'
                           : 'bg-[#e8913a] text-[#0d0a08] font-bold shadow' 
+                        : isRose
+                        ? 'text-rose-300 bg-rose-500/10 hover:bg-rose-500/25 border border-rose-500/30'
                         : isSpecial
                         ? 'text-[#d8b4fe] bg-[#a855f7]/10 hover:bg-[#a855f7]/25 border border-[#a855f7]/30'
                         : 'text-[#b5a990] hover:text-white hover:bg-white/5'
@@ -234,6 +262,249 @@ export function EvolutionChakraModal({
             {/* TAB CONTENTS (SCROLLABLE) */}
             <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 font-serif text-xs leading-relaxed">
               
+              {/* TAB 0: WHAT IF 4TH DIMENSION THEATER */}
+              {activeTab === 'whatif_4d' && (
+                <div className="space-y-6 animate-in fade-in duration-200">
+                  {/* Hero Header */}
+                  <div className="p-4 rounded-[12px] bg-gradient-to-r from-[#2a131a] via-[#1a0f12] to-[#140e0a] border border-rose-500/40 shadow-xl space-y-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-rose-500/20 pb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 uppercase">
+                          WHAT IF SCIENCE SHOW DOCUMENTARY
+                        </span>
+                        <span className="text-xs font-mono text-gray-400">
+                          {WHAT_IF_4TH_DIMENSION_VIDEO.creator}
+                        </span>
+                      </div>
+                      <a
+                        href={WHAT_IF_4TH_DIMENSION_VIDEO.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-2.5 py-1 rounded-md text-[10.5px] font-mono font-bold bg-white/10 hover:bg-white/20 text-amber-300 border border-white/15 flex items-center gap-1.5 transition-all"
+                      >
+                        <span>Watch on YouTube</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                    <h3 className="text-lg sm:text-xl font-serif font-black text-[#fde047]">
+                      {WHAT_IF_4TH_DIMENSION_VIDEO.title}
+                    </h3>
+                    <p className="text-xs text-gray-300 leading-relaxed font-sans">
+                      {WHAT_IF_4TH_DIMENSION_VIDEO.synopsis}
+                    </p>
+                  </div>
+
+                  {/* Responsive 16:9 Video Embed */}
+                  <div className="relative rounded-2xl overflow-hidden border border-rose-500/40 shadow-[0_0_35px_rgba(244,63,94,0.25)] bg-black">
+                    <div className="aspect-video w-full bg-black">
+                      <iframe
+                        src={`${WHAT_IF_4TH_DIMENSION_VIDEO.embedUrl}?rel=0`}
+                        title={WHAT_IF_4TH_DIMENSION_VIDEO.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                        className="w-full h-full border-0"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Interactive Chapter Timeline (7 chapters) */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
+                      <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5" />
+                        <span>Documentary Chapters & Timestamp Navigator</span>
+                      </span>
+                      <span className="text-[10px] font-mono text-gray-400">
+                        Click any chapter to inspect 4D proofs
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-1.5">
+                      {WHAT_IF_4TH_DIMENSION_VIDEO.chapters.map((ch, idx) => {
+                        const isSelected = selected4DChapterIdx === idx;
+                        return (
+                          <button
+                            key={ch.timestamp}
+                            onClick={() => {
+                              soundManager.tick();
+                              setSelected4DChapterIdx(idx);
+                            }}
+                            className={`p-2 rounded-lg border text-left transition-all ${
+                              isSelected
+                                ? 'bg-rose-500/25 border-rose-400 text-rose-200 shadow-md shadow-rose-500/20'
+                                : 'bg-black/50 border-white/10 hover:border-white/20 hover:bg-white/5 text-gray-400'
+                            }`}
+                          >
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-black/70 border border-rose-500/30 text-rose-300 block w-fit mb-1">
+                              {ch.timestamp}
+                            </span>
+                            <div className="text-[11px] font-serif font-bold text-white truncate">
+                              {ch.title}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Selected Chapter Detail Card */}
+                    {WHAT_IF_4TH_DIMENSION_VIDEO.chapters[selected4DChapterIdx] && (
+                      <div className="p-4 rounded-xl bg-gradient-to-br from-[#1d1216] via-[#140d10] to-[#0c0906] border border-rose-500/30 space-y-3 shadow-lg">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-2">
+                          <div>
+                            <span className="text-[10px] font-mono font-bold text-rose-400 uppercase tracking-widest block">
+                              Chapter 0{selected4DChapterIdx + 1} • {WHAT_IF_4TH_DIMENSION_VIDEO.chapters[selected4DChapterIdx].timestamp}
+                            </span>
+                            <h4 className="text-sm sm:text-base font-serif font-black text-[#fde047]">
+                              {WHAT_IF_4TH_DIMENSION_VIDEO.chapters[selected4DChapterIdx].title}
+                            </h4>
+                            <p className="text-[11px] font-mono text-cyan-300">
+                              {WHAT_IF_4TH_DIMENSION_VIDEO.chapters[selected4DChapterIdx].tagline}
+                            </p>
+                          </div>
+
+                          <a
+                            href={`${WHAT_IF_4TH_DIMENSION_VIDEO.url}&t=${WHAT_IF_4TH_DIMENSION_VIDEO.chapters[selected4DChapterIdx].seconds}s`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-xs font-mono font-bold flex items-center gap-1.5 shrink-0 self-start sm:self-auto transition-all"
+                          >
+                            <PlayCircle className="w-3.5 h-3.5 text-rose-400" />
+                            <span>Jump to {WHAT_IF_4TH_DIMENSION_VIDEO.chapters[selected4DChapterIdx].timestamp}</span>
+                          </a>
+                        </div>
+
+                        <p className="text-xs text-gray-200 leading-relaxed font-sans">
+                          {WHAT_IF_4TH_DIMENSION_VIDEO.chapters[selected4DChapterIdx].description}
+                        </p>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 pt-1">
+                          {WHAT_IF_4TH_DIMENSION_VIDEO.chapters[selected4DChapterIdx].keyPoints.map((pt, pIdx) => (
+                            <div key={pIdx} className="p-2.5 rounded-lg bg-black/60 border border-white/10 flex items-start gap-2">
+                              <span className="w-4 h-4 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center font-mono text-[9px] font-bold shrink-0 mt-0.5">
+                                {pIdx + 1}
+                              </span>
+                              <span className="text-[11px] text-gray-300 leading-relaxed font-sans">
+                                {pt}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* 4 Superbeing Powers Dossier */}
+                  <div className="space-y-3 pt-2">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
+                      <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>The 4 Superbeing Capabilities (Indistinguishable from Godhood)</span>
+                      </span>
+                      <span className="text-[10px] font-mono text-gray-400">
+                        Select a power to inspect Flatland mechanics
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {WHAT_IF_4TH_DIMENSION_VIDEO.superbeingPowers.map((pow) => {
+                        const isCurrent = selectedPowerId === pow.id;
+                        return (
+                          <button
+                            key={pow.id}
+                            onClick={() => {
+                              soundManager.tick();
+                              setSelectedPowerId(pow.id);
+                            }}
+                            className={`p-2.5 rounded-xl border text-left transition-all ${
+                              isCurrent
+                                ? 'bg-amber-500/20 border-amber-400 text-amber-200 shadow-md'
+                                : 'bg-black/50 border-white/10 hover:border-white/20 text-gray-400'
+                            }`}
+                          >
+                            <span className="text-[9px] font-mono text-cyan-300 block uppercase">
+                              {pow.category}
+                            </span>
+                            <h5 className="text-xs font-serif font-bold text-white line-clamp-1 mt-0.5">
+                              {pow.name}
+                            </h5>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Active Power Inspector */}
+                    {(() => {
+                      const activePow = WHAT_IF_4TH_DIMENSION_VIDEO.superbeingPowers.find(p => p.id === selectedPowerId) || WHAT_IF_4TH_DIMENSION_VIDEO.superbeingPowers[0];
+                      return (
+                        <div className="p-4 rounded-xl bg-gradient-to-b from-[#1c140d] to-[#100a06] border border-amber-500/30 space-y-3 shadow-lg">
+                          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-amber-500/20 pb-2">
+                            <div>
+                              <span className="text-[10px] font-mono text-amber-400 uppercase tracking-widest block">
+                                {activePow.sanskritName}
+                              </span>
+                              <h4 className="text-sm font-serif font-black text-[#fde047]">
+                                {activePow.name}
+                              </h4>
+                            </div>
+                            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                              {activePow.category} Mechanics
+                            </span>
+                          </div>
+
+                          <p className="text-xs text-gray-200 leading-relaxed font-sans">
+                            {activePow.description}
+                          </p>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                            <div className="p-2.5 rounded bg-black/60 border border-white/10 space-y-1">
+                              <strong className="text-cyan-400 block font-mono text-[10.5px]">
+                                📐 The Flatland Analogy:
+                              </strong>
+                              <p className="text-gray-300 text-[11px] leading-relaxed">
+                                {activePow.flatlandAnalogy}
+                              </p>
+                            </div>
+                            <div className="p-2.5 rounded bg-black/60 border border-white/10 space-y-1">
+                              <strong className="text-amber-400 block font-mono text-[10.5px]">
+                                ⚡ Physical & Theoretical Mechanism:
+                              </strong>
+                              <p className="text-gray-300 text-[11px] leading-relaxed">
+                                {activePow.physicalMechanism}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="p-2.5 rounded bg-amber-500/10 border border-amber-500/20 text-[11px] text-[#fde047] leading-relaxed">
+                            <strong className="text-amber-300 font-mono block mb-0.5">🕉️ Vedic Parallel:</strong>
+                            {activePow.vedicParallel}
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </div>
+
+                  {/* Grand Philosophical & Bhagavad Gita 11 Viśvarūpa Resolution */}
+                  <div className="p-4 rounded-xl bg-gradient-to-r from-[#20150d] via-[#140e09] to-[#0d0906] border border-amber-500/30 space-y-2 shadow-lg">
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">🕉️</span>
+                      <div>
+                        <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest block">
+                          BHAGAVAD GITA 11.8 • DIVYA CHAKSHU & THE BLOCK UNIVERSE
+                        </span>
+                        <h4 className="text-xs font-serif font-bold text-[#fde047]">
+                          The Trans-Temporal Divine Eye
+                        </h4>
+                      </div>
+                    </div>
+                    <p className="text-[11px] text-gray-300 font-serif leading-relaxed">
+                      <em>&ldquo;Na tu māṁ śakyase draṣṭum anenaiva sva-cakṣuṣā | divyaṁ dadāmi te cakṣuḥ paśya me yogam aiśvaram&rdquo;</em> (BG 11.8) — 
+                      Sri Krishna tells Arjuna: <em>&ldquo;You cannot behold My true form with your physical (3D biological) eyes; therefore I bestow upon you the Divine Eye (higher-dimensional perception).&rdquo;</em> 
+                      Arjuna immediately perceives all timelines simultaneously: warriors already entering the mouth of time, stars forming and dying, and past/future unified in a single transcendent block. The 4th dimension resolves the mystery of divine omnipresence not as magic, but as the natural geometry of higher space.
+                    </p>
+                  </div>
+                </div>
+              )}
+
               {/* TAB 1: PHYSICS & EQUATIONS */}
               {activeTab === 'physics' && (
                 <div className="space-y-4 animate-in fade-in duration-200">
@@ -598,6 +869,27 @@ export function EvolutionChakraModal({
                             <strong className="text-[#6fb0b2] block mb-0.5">Entity Capabilities in this Dimension:</strong>
                             <p>{selectedDimension.entityCapabilities}</p>
                           </div>
+
+                          {selectedDimension.dimension === 4 && (
+                            <div className="p-3 rounded-lg bg-gradient-to-r from-rose-500/20 via-black to-amber-500/10 border border-rose-500/30 flex items-center justify-between gap-3">
+                              <div className="flex items-center gap-2">
+                                <Film className="w-4 h-4 text-rose-400 shrink-0" />
+                                <span className="text-xs text-rose-200 font-serif">
+                                  <strong>Featured Documentary:</strong> What If You Could See the 4th Dimension?
+                                </span>
+                              </div>
+                              <button
+                                onClick={() => {
+                                  soundManager.playClick();
+                                  setActiveTab('whatif_4d');
+                                }}
+                                className="px-3 py-1 rounded bg-rose-500 hover:bg-rose-600 text-white font-mono text-[10px] font-bold flex items-center gap-1 shrink-0 transition-all shadow active:scale-95"
+                              >
+                                <span>Launch 4D Theater</span>
+                                <PlayCircle className="w-3 h-3" />
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
