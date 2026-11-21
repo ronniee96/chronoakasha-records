@@ -8,6 +8,11 @@ export interface KardashevType {
   propulsionMechanism: string;
   civilizationalSociology: string;
   limitationsAndPhysics: string;
+  videoHighlights?: {
+    breakthrough: string;
+    accelerator: string;
+    existentialGate: string;
+  };
 }
 
 export interface ScenarioHorizon {
@@ -29,6 +34,87 @@ export interface ScenarioHorizon {
   underlyingAssumptions: string[];
 }
 
+export interface DocumentaryChapter {
+  timestamp: string;
+  seconds: number;
+  title: string;
+  tagline: string;
+  description: string;
+  keyPoints: string[];
+}
+
+export const WHAT_IF_TYPE_III_VIDEO = {
+  videoId: 'VGLSPU8lprc',
+  title: 'What If Earth Became a Type III Civilization?',
+  creator: 'What If Science Show',
+  url: 'https://youtu.be/VGLSPU8lprc',
+  embedUrl: 'https://www.youtube.com/embed/VGLSPU8lprc',
+  thumbnailUrl: 'https://i.ytimg.com/vi/VGLSPU8lprc/hqdefault.jpg',
+  synopsis: 'From our current baseline of 0.73, humanity must conquer AI-accelerated nuclear fusion and weather engineering to reach Type I, construct Dyson Swarms and solar system thrusters to achieve Type II, and deploy self-replicating Von Neumann probe fleets across the 100,000 light-year Milky Way disc to become a Type III galactic civilization.',
+  chapters: [
+    {
+      timestamp: '00:00',
+      seconds: 0,
+      title: 'Earth at 0.73: The Kardashev Baseline',
+      tagline: 'Bound to One Rock in a Trillion-Planet Universe',
+      description: 'Machine learning calculations place modern Earth at approximately 0.726 on the Sagan-Kardashev scale. Current trends suggest reaching only 0.75 by 2060, requiring over 300 years to attain full Type I status unless accelerated by machine intelligence.',
+      keyPoints: [
+        'Nikolay Kardashev (1964) proposed classifying civilizations by power consumption orders of magnitude.',
+        'Humanity currently burns through ~1.8 × 10¹³ Watts, mostly from chemical fossil hydrocarbons.',
+        'Despite 6,000+ confirmed exoplanets, zero technosignatures or radio signals have ever been detected.'
+      ]
+    },
+    {
+      timestamp: '01:30',
+      seconds: 90,
+      title: 'Type I: Weather Control & AI-Accelerated Fusion',
+      tagline: 'Capturing Every Photon and Calming the Oceans',
+      description: 'Reaching Type I requires harnessing ~10¹⁷ W—all solar flux striking the Earth plus global nuclear fusion. Artificial intelligence is already compressing 800 years of scientific research into days to unlock fusion containment and new superconducting crystal lattices.',
+      keyPoints: [
+        'DeepMind GNoME identified 2.2 million new inorganic crystal structures for next-generation energy storage.',
+        'UK Atomic Energy Authority deploys AI supercomputing to predict and suppress tokamak plasma disruptions.',
+        'Type I mastery grants total weather stabilization: neutralizing hurricanes, routing rainfall, and tapping geothermal vents.'
+      ]
+    },
+    {
+      timestamp: '03:15',
+      seconds: 195,
+      title: 'The Great Filter: Nuclear Arsenals & AI Alignment',
+      tagline: 'Why the Galaxy Appears Hauntingly Silent',
+      description: 'Enrico Fermi asked in 1950: "Where is everybody?" The Great Filter hypothesis suggests young civilizations inevitably hit self-destruction bottlenecks: thermonuclear exchange (Cold War peaked at 70,000 warheads, 12,000 remain) or runaway misaligned artificial agents.',
+      keyPoints: [
+        'Drake Equation (1961) predicts thousands of intelligent species in the Milky Way, yet the sky is silent.',
+        'The Great Filter may lie right ahead: nuclear proliferation, catastrophic climate tipping, or unaligned AGI.',
+        'Foresight, societal resilience, and built-in ethical guardrails are what allow a species to cross into Type I.'
+      ]
+    },
+    {
+      timestamp: '05:40',
+      seconds: 340,
+      title: 'Type II: Freeman Dyson & Stellar Engines',
+      tagline: 'Trapping Starfire and Steering the Sun',
+      description: 'First hypothesized by Freeman Dyson in 1960, a Type II species surrounds its star with millions of orbital photovoltaic collectors (Dyson Swarm) or constructs a Shkadov Thruster to physically propel the entire solar system through the galactic disc.',
+      keyPoints: [
+        'A Dyson Swarm captures the Sun’s entire luminosity of 3.828 × 10²⁶ Watts.',
+        'Shkadov Thruster uses asymmetric parabolic mirrors to harness solar radiation pressure, moving our planetary system.',
+        'Gigawatt orbital lasers zap incoming comets for freshwater and manipulate asteroid trajectories for raw ores.'
+      ]
+    },
+    {
+      timestamp: '08:00',
+      seconds: 480,
+      title: 'Type III: Von Neumann Fleets & Galactic Minds',
+      tagline: 'Seeding 100 Billion Stars and Reaching Andromeda',
+      description: 'The Milky Way is 100,000 light-years across. Traversing it requires self-replicating Von Neumann robotic probes that land on distant moons, mine local materials, fabricate replicas, and expand exponentially. Humans transition into post-biological hybrid super-beings.',
+      keyPoints: [
+        'Von Neumann probe fleets can traverse and colonize an entire 100,000 light-year galaxy in just a few million years.',
+        'Humans will not cross the cosmos in fragile carbon-water bodies; consciousness uploads into distributed quantum substrates.',
+        'Type III civilizations establish galactic-scale radio grids and launch vanguard expeditions toward the Andromeda Galaxy.'
+      ]
+    }
+  ]
+};
+
 export const KARDASHEV_SCALE: KardashevType[] = [
   {
     type: 'Type 0',
@@ -39,40 +125,60 @@ export const KARDASHEV_SCALE: KardashevType[] = [
     astrophysicalFootprint: 'Invisible beyond low Earth orbit except for faint radio leakage, artificial satellite constellations, and nightside light emissions.',
     propulsionMechanism: 'Chemical liquid/solid rocketry (Specific Impulse ~300-450 s), electric ion thrusters for orbital adjustment.',
     civilizationalSociology: 'National nation-states with fragmented resource competition, emerging planetary internet, and geopolitical rivalries.',
-    limitationsAndPhysics: 'Vulnerable to planetary extinction risks: nuclear exchange, engineered pandemics, unmanaged artificial general intelligence, and severe climate destabilization.',
+    limitationsAndPhysics: 'Vulnerable to planetary extinction risks: nuclear exchange (12,000+ warheads still active), unmanaged runaway AI, and climate tipping points.',
+    videoHighlights: {
+      breakthrough: 'Early artificial intelligence models (LLMs, neural networks) and foundational fission.',
+      accelerator: 'Transition from fossil fuels to orbital solar, AI-guided material discovery, and high-density batteries.',
+      existentialGate: 'The Great Filter bottleneck: surviving mutually assured destruction and algorithmic misalignment.'
+    }
   },
   {
     type: 'Type I',
     name: 'Planetary Civilization',
     sanskrit: 'समग्र भौमिक सभ्यता (Type I)',
     powerWatts: '~10¹⁶ — 10¹⁷ W (Harnessing all sunlight intercepted by Earth ~1.74 × 10¹⁷ W)',
-    energyHarnessScale: 'Commercial nuclear fusion (D-T & D-He3), planetary orbital solar reflectors, deep geothermal, and comprehensive ocean thermal conversion.',
-    astrophysicalFootprint: 'Engineered Earth weather control grids, orbital elevator tether stations, self-sustaining permanent settlements on Moon and Mars.',
-    propulsionMechanism: 'Fusion magnetoplasmadynamic drives, beamed laser solar sails reaching 10-20% speed of light for interstellar probes.',
+    energyHarnessScale: 'AI-accelerated commercial nuclear fusion (DeepMind crystal discovery & UKAEA tokamak modeling), orbital solar collector arrays, and deep geothermal taps.',
+    astrophysicalFootprint: 'Engineered Earth weather control grids (hurricanes deflected, rainfall steered), orbital elevator tether stations, self-sustaining permanent bases on Moon and Mars.',
+    propulsionMechanism: 'Fusion magnetoplasmadynamic drives, beamed laser solar sails reaching 10-20% speed of light for interstellar scouting probes.',
     civilizationalSociology: 'Global unified governance framework, eradication of extreme poverty and disease, universal cybernetic cognitive integration.',
     limitationsAndPhysics: 'Thermal dissipation limits of planetary atmosphere requiring radiating waste heat into space; vulnerable to nearby supernovae and major asteroid impacts.',
+    videoHighlights: {
+      breakthrough: 'Complete planetary climate & weather control; tapping volcanic, tectonic, and solar atmospheric energy.',
+      accelerator: 'Autonomous AI supercomputing discovering millions of inorganic crystal lattices (equivalent to 800 years of lab work).',
+      existentialGate: 'Atmospheric thermodynamic heat traps; planetary defense against Earth-crossing bolides.'
+    }
   },
   {
     type: 'Type II',
     name: 'Stellar Civilization (Dyson Swarm)',
     sanskrit: 'सौर मण्डलीय सभ्यता (Type II)',
     powerWatts: '~3.828 × 10²⁶ W (Complete luminosity of host star Sun L☉)',
-    energyHarnessScale: 'Dyson Swarm: millions of thin-film photovoltaic statites orbiting the star, star lifting of hydrogen/helium, artificial fusion containment.',
-    astrophysicalFootprint: 'Characteristic infrared excess radiation (300 K blackbody signature) detectable by alien astronomers; total industrialization of Kuiper Belt and Oort Cloud.',
-    propulsionMechanism: 'Antimatter annihilation engines, Shkadov thrusters moving the host star system itself through interstellar space, relativistic kinetic shielding.',
+    energyHarnessScale: 'Freeman Dyson (1960) Swarm: billions of thin-film photovoltaic statites orbiting the Sun, star lifting of solar hydrogen, and artificial fusion containment.',
+    astrophysicalFootprint: 'Characteristic infrared excess radiation (300 K blackbody signature) detectable across exoplanet surveys; Shkadov Thrusters moving the Sun through space.',
+    propulsionMechanism: 'Antimatter annihilation engines, stellar engines moving the host star system itself through interstellar space, gigawatt laser arrays zapping comets for water.',
     civilizationalSociology: 'Post-biological intelligence, digital substrate uploading, distributed consensus minds across Matrioshka megacomputers.',
     limitationsAndPhysics: 'Bounded by the speed of light for communication delays across the light-hours of the solar system; immune to planetary extinction.',
+    videoHighlights: {
+      breakthrough: 'Dyson Swarm megastructures and Shkadov Thruster star engines physically steering the solar system.',
+      accelerator: 'Automated swarm fabrication utilizing raw material stripped from Mercury and Kuiper Belt asteroids.',
+      existentialGate: 'Stellar evolution management (preventing red giant expansion in deep cosmological time).'
+    }
   },
   {
     type: 'Type III',
     name: 'Galactic Civilization',
     sanskrit: 'आकाशगङ्गा सभ्यता (Type III)',
     powerWatts: '~10³⁶ — 10³⁸ W (Luminosity of entire galaxy ~100-400 billion stars)',
-    energyHarnessScale: 'Harnessing energy from hundreds of billions of stars, supermassive black hole accretion disk penrose processes, galactic center tap.',
-    astrophysicalFootprint: 'Total restructuring of galactic spiral arms into networked stellar engines; engineered star formation and controlled hypernovae.',
-    propulsionMechanism: 'Alcubierre metric space-time manipulation, wormhole transit networks, self-replicating von Neumann machine swarms spanning light-centuries.',
-    civilizationalSociology: 'Multi-dimensional hive intelligences and transcendent philosophical entities functioning across millions of star systems.',
+    energyHarnessScale: 'Harnessing energy from hundreds of billions of stars, supermassive black hole accretion disk Penrose processes, galactic center tap.',
+    astrophysicalFootprint: 'Total restructuring of galactic spiral arms into networked stellar engines; engineered star formation and controlled hypernovae; expansion toward Andromeda Galaxy.',
+    propulsionMechanism: 'Self-replicating Von Neumann robotic probe fleets spanning the 100,000 light-year galactic disc, Alcubierre metric spacetime warp bubbles, wormhole transits.',
+    civilizationalSociology: 'Post-biological hybrid of artificial and natural intelligence: deeply interconnected galactic internet super-beings transcending single planetary bodies.',
     limitationsAndPhysics: 'Relativistic horizons across 100,000 light-year galactic diameters; coordinated action requires self-stabilizing decentralized evolutionary nodes.',
+    videoHighlights: {
+      breakthrough: 'Self-replicating Von Neumann machine swarms exponentially seeding all 100 billion star systems.',
+      accelerator: 'Transcending organic carbon biology; consciousness becomes light and quantum lattice fabric.',
+      existentialGate: 'Intergalactic transit hurdles (crossing 2.5 million light-years to the Andromeda Galaxy).'
+    }
   },
 ];
 
