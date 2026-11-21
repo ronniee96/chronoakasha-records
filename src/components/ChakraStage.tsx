@@ -1097,6 +1097,7 @@ export function ChakraStage({
           categoryCode={selectedEvent.categoryCode}
           caption={selectedEvent.title}
           isLightMode={isLightMode}
+          isExpanded={isExpanded}
         />
 
         {/* Bhagavad Gita Verse Card */}

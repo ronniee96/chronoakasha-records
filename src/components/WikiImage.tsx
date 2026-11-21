@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Maximize2, X, Scan, Check } from 'lucide-react';
 import wikiThumbnailsData from '../data/wikiThumbnails.json';
 import tryambakImageMap from '../data/tryambakImageMap.json';
 
@@ -11,6 +11,7 @@ export interface WikiImageProps {
   categoryCode?: string;
   caption?: string;
   isLightMode?: boolean;
+  isExpanded?: boolean;
 }
 
 export interface ImageRecord {
@@ -68,6 +69,7 @@ function WikiImageInner({
   targetTitle,
   caption,
   isLightMode,
+  isExpanded,
 }: WikiImageProps & { targetTitle: string }) {
   // Synchronous cache lookup: 0ms instant resolution
   const cachedRecord = clientImageCache.has(targetTitle)
@@ -79,6 +81,17 @@ function WikiImageInner({
   const [isLoading, setIsLoading] = useState<boolean>(
     Boolean(!cachedRecord && !clientImageCache.has(targetTitle))
   );
+  const [cropMode, setCropMode] = useState<'fit' | 'fill'>('fit');
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isLightboxOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsLightboxOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isLightboxOpen]);
 
   useEffect(() => {
     // Reset attempt state on new targetTitle
@@ -213,70 +226,204 @@ function WikiImageInner({
     : (attemptState === 'fallback' && imgRecord.fb ? imgRecord.fb : imgRecord.src);
 
   return (
-    <figure
-      className={`relative rounded-[12px] overflow-hidden border shadow-2xl transition-all duration-300 animate-in fade-in ${
-        isLightMode
-          ? 'bg-[#eadeca] border-[#c59b27]/40'
-          : 'bg-gradient-to-b from-[#1c140d] via-[#120d08] to-[#0a0704] border-[rgba(232,145,58,0.35)]'
-      } group`}
-    >
-      {/* Decorative Traditional Indian Brass Corner Accents */}
-      <span className="absolute top-1.5 left-1.5 z-20 text-[9px] text-[#e8913a] select-none opacity-80">
-        ❖
-      </span>
-      <span className="absolute top-1.5 right-1.5 z-20 text-[9px] text-[#e8913a] select-none opacity-80">
-        ❖
-      </span>
-      <span className="absolute bottom-11 left-1.5 z-20 text-[9px] text-[#e8913a] select-none opacity-80">
-        ❖
-      </span>
-      <span className="absolute bottom-11 right-1.5 z-20 text-[9px] text-[#e8913a] select-none opacity-80">
-        ❖
-      </span>
+    <>
+      <figure
+        className={`relative rounded-[14px] overflow-hidden border shadow-2xl transition-all duration-300 animate-in fade-in ${
+          isLightMode
+            ? 'bg-[#eadeca] border-[#c59b27]/40'
+            : 'bg-gradient-to-b from-[#1c140d] via-[#120d08] to-[#0a0704] border-[rgba(232,145,58,0.35)]'
+        } group`}
+      >
+        {/* Decorative Traditional Indian Brass Corner Accents */}
+        <span className="absolute top-2 left-2 z-20 text-[10px] text-[#e8913a] select-none opacity-80 pointer-events-none">
+          ❖
+        </span>
+        <span className="absolute top-2 right-2 z-20 text-[10px] text-[#e8913a] select-none opacity-80 pointer-events-none">
+          ❖
+        </span>
 
-      <div className="relative w-full h-56 sm:h-64 md:h-72 overflow-hidden flex items-center justify-center bg-[#0d0a08]">
-        <img
-          key={currentSrc}
-          src={currentSrc}
-          alt={imgRecord.title || caption || 'Historical record'}
-          referrerPolicy="no-referrer"
-          loading="eager"
-          onError={() => {
-            if (attemptState === 'primary' && imgRecord.fb && imgRecord.src !== imgRecord.fb) {
-              setAttemptState('fallback');
-            } else if (attemptState === 'primary' || attemptState === 'fallback') {
-              setAttemptState('proxy');
-            } else {
-              setAttemptState('failed');
-            }
-          }}
-          className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
-        />
-
-        {/* Subtle authentic glow overlay */}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-black/20" />
-      </div>
-
-      {/* Ornate Copperplate Caption Plaque */}
-      <figcaption className="p-3 bg-gradient-to-t from-[#16100b] via-[#1a130e] to-[#241a12] text-[11px] text-[#b5a990] flex items-center justify-between border-t border-[rgba(232,145,58,0.25)] select-none">
-        <div className="truncate pr-3 flex items-center gap-1.5">
-          <span className="text-[#e8913a]">✦</span>
-          <span className="truncate font-serif font-semibold text-[#efe6d6]">
-            {imgRecord.title || caption}
-          </span>
+        {/* Floating Top Controls: Fit/Fill Toggle & Fullscreen Modal */}
+        <div className="absolute top-2.5 right-6 z-30 flex items-center gap-1.5 opacity-90 hover:opacity-100 transition-opacity">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setCropMode((prev) => (prev === 'fit' ? 'fill' : 'fit'));
+            }}
+            className="px-2 py-0.5 rounded-[5px] bg-[#0d0905]/85 hover:bg-[#1a120c] backdrop-blur-md border border-[rgba(232,145,58,0.4)] text-[9.5px] font-mono font-medium text-[#d4af37] flex items-center gap-1 shadow-md transition-all"
+            title={cropMode === 'fit' ? 'Toggle to Fill Frame (Top-Anchored)' : 'Toggle to Fit Whole Image (No Crop)'}
+          >
+            <Scan className="w-2.5 h-2.5 text-[#e8913a]" />
+            <span>{cropMode === 'fit' ? 'FIT: NO CROP' : 'FILL'}</span>
+          </button>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsLightboxOpen(true);
+            }}
+            className="p-1 rounded-[5px] bg-[#0d0905]/85 hover:bg-[#1a120c] backdrop-blur-md border border-[rgba(232,145,58,0.4)] text-[#d4af37] hover:text-[#fde047] shadow-md transition-all"
+            title="Expand to Fullscreen View"
+            aria-label="Expand to Fullscreen View"
+          >
+            <Maximize2 className="w-3 h-3" />
+          </button>
         </div>
-        <a
-          href={imgRecord.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1 text-[10px] font-mono text-[#d4af37] hover:text-[#f2c47a] transition-colors shrink-0 bg-black/40 px-2 py-0.5 rounded border border-[#e8913a]/30"
-          aria-label="Open Historical Archive Entry on Wikipedia"
+
+        {/* 
+          Image Viewport Container:
+          Standard layout (panel ~380px wide): h-64 sm:h-72 md:h-80 lg:h-[350px]
+          Expanded widescreen layout (panel ~800-1200px wide): h-80 sm:h-96 md:h-[420px] lg:h-[480px]
+        */}
+        <div
+          className={`relative w-full overflow-hidden flex items-center justify-center bg-[#070503] transition-all duration-500 cursor-zoom-in ${
+            isExpanded
+              ? 'h-80 sm:h-96 md:h-[420px] lg:h-[480px]'
+              : 'h-64 sm:h-72 md:h-80 lg:h-[350px]'
+          }`}
+          onClick={() => setIsLightboxOpen(true)}
+          title="Click to view full uncropped artwork in high resolution"
         >
-          <span>WIKIPEDIA</span>
-          <ExternalLink className="w-2.5 h-2.5" />
-        </a>
-      </figcaption>
-    </figure>
+          {/* Ambient blurred aura backdrop — eliminates harsh black bars while harmonizing with art */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none select-none">
+            <img
+              src={currentSrc}
+              alt=""
+              aria-hidden="true"
+              referrerPolicy="no-referrer"
+              className="w-full h-full object-cover blur-3xl scale-125 opacity-35 brightness-75 transition-all duration-700"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0d0a08]/90 via-[#0d0a08]/20 to-[#0d0a08]/60 pointer-events-none" />
+          </div>
+
+          {/* Primary sharp artwork — ZERO CROPPING in fit mode, full head/crown always preserved */}
+          <div className="relative z-10 w-full h-full flex items-center justify-center p-2 sm:p-3">
+            <img
+              key={currentSrc}
+              src={currentSrc}
+              alt={imgRecord.title || caption || 'Historical record'}
+              referrerPolicy="no-referrer"
+              loading="eager"
+              onError={() => {
+                if (attemptState === 'primary' && imgRecord.fb && imgRecord.src !== imgRecord.fb) {
+                  setAttemptState('fallback');
+                } else if (attemptState === 'primary' || attemptState === 'fallback') {
+                  setAttemptState('proxy');
+                } else {
+                  setAttemptState('failed');
+                }
+              }}
+              className={`transition-all duration-500 drop-shadow-[0_12px_36px_rgba(0,0,0,0.9)] ${
+                cropMode === 'fill'
+                  ? 'w-full h-full object-cover object-top rounded-[6px]'
+                  : 'max-h-full max-w-full w-auto h-auto object-contain rounded-[6px] group-hover:scale-[1.015]'
+              }`}
+            />
+          </div>
+
+          {/* Subtle authentic vignette border */}
+          <div className="absolute inset-0 pointer-events-none ring-1 ring-inset ring-black/40 rounded-[14px]" />
+        </div>
+
+        {/* Ornate Copperplate Caption Plaque */}
+        <figcaption className="p-3 bg-gradient-to-t from-[#16100b] via-[#1a130e] to-[#241a12] text-[11px] text-[#b5a990] flex items-center justify-between border-t border-[rgba(232,145,58,0.25)] select-none">
+          <div className="truncate pr-3 flex items-center gap-1.5">
+            <span className="text-[#e8913a]">✦</span>
+            <span className="truncate font-serif font-semibold text-[#efe6d6]">
+              {imgRecord.title || caption}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => setIsLightboxOpen(true)}
+              className="hidden sm:inline-flex items-center gap-1 text-[10px] font-serif text-[#b5a990] hover:text-[#fde047] transition-colors"
+            >
+              <span>पूर्ण दर्शन</span>
+            </button>
+            <a
+              href={imgRecord.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-[10px] font-mono text-[#d4af37] hover:text-[#f2c47a] transition-colors bg-black/40 px-2 py-0.5 rounded border border-[#e8913a]/30"
+              aria-label="Open Historical Archive Entry on Wikipedia"
+            >
+              <span>WIKIPEDIA</span>
+              <ExternalLink className="w-2.5 h-2.5" />
+            </a>
+          </div>
+        </figcaption>
+      </figure>
+
+      {/* Fullscreen Sacred Art Lightbox Modal */}
+      {isLightboxOpen && (
+        <div
+          className="fixed inset-0 z-[120] bg-black/95 backdrop-blur-xl flex flex-col items-center justify-between p-4 sm:p-6 animate-in fade-in duration-300 select-none"
+          onClick={() => setIsLightboxOpen(false)}
+        >
+          {/* Lightbox Header Bar */}
+          <div
+            className="w-full max-w-6xl flex items-center justify-between pb-3 border-b border-[rgba(232,145,58,0.3)] shrink-0"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-2">
+              <span className="text-[#e8913a] text-xl font-serif">ॐ</span>
+              <div>
+                <h3 className="text-sm sm:text-base font-serif font-bold text-[#efe6d6] leading-tight">
+                  {imgRecord.title || caption}
+                </h3>
+                <span className="text-[10px] font-mono text-[#b5a990] uppercase tracking-wider">
+                  सनातन ऐतिहासिक चित्रावली • SACRED ICONOGRAPHY ARCHIVE
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <a
+                href={imgRecord.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[11px] font-mono text-[#d4af37] hover:text-[#fde047] bg-[#1a120c] px-3 py-1.5 rounded-lg border border-[#e8913a]/40 transition-colors"
+              >
+                <span>WIKIMEDIA COMMONS</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+              <button
+                type="button"
+                onClick={() => setIsLightboxOpen(false)}
+                className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-[#efe6d6] hover:text-white transition-colors"
+                aria-label="Close Fullscreen"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Main Lightbox Image Viewport */}
+          <div
+            className="flex-1 w-full flex items-center justify-center py-4 overflow-hidden"
+            onClick={() => setIsLightboxOpen(false)}
+          >
+            <img
+              src={currentSrc}
+              alt={imgRecord.title || caption || 'Sacred historical artwork'}
+              referrerPolicy="no-referrer"
+              className="max-h-[82vh] max-w-[94vw] object-contain rounded-lg shadow-[0_25px_70px_rgba(0,0,0,0.98)] border border-[rgba(232,145,58,0.25)] animate-in zoom-in-95 duration-300"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+
+          {/* Lightbox Footer Note */}
+          <div
+            className="w-full max-w-6xl text-center text-[11px] font-serif text-[#b5a990] pt-2 border-t border-[rgba(232,145,58,0.2)] shrink-0"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <span>
+              Press <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono text-[10px]">Esc</kbd> or click anywhere outside to dismiss • Original uncropped sacred artwork
+            </span>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

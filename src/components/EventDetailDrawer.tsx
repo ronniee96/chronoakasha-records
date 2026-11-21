@@ -131,13 +131,26 @@ export function EventDetailDrawer({
 
         {/* High-Resolution Photographic Card via Local Same-Origin Proxy */}
         <figure className="relative rounded-[14px] overflow-hidden border border-[rgba(232,214,180,0.18)] bg-black/60 shadow-xl group">
-          <div className="relative w-full h-64 md:h-72 bg-black flex items-center justify-center overflow-hidden">
-            <img 
-              src={proxyImageUrl} 
-              alt={event.imageCaption || event.title}
-              onLoad={() => setImgLoaded(true)}
-              className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ${imgLoaded ? 'opacity-100' : 'opacity-80 animate-pulse'}`}
-            />
+          <div className="relative w-full h-64 sm:h-72 md:h-80 bg-[#0d0a08] flex items-center justify-center overflow-hidden">
+            {/* Ambient blurred backdrop */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none select-none">
+              <img 
+                src={proxyImageUrl}
+                alt=""
+                aria-hidden="true"
+                className="w-full h-full object-cover blur-3xl scale-125 opacity-35 brightness-75 pointer-events-none"
+              />
+              <div className="absolute inset-0 bg-black/40 pointer-events-none" />
+            </div>
+            {/* Primary uncropped artwork */}
+            <div className="relative z-10 w-full h-full flex items-center justify-center p-2 sm:p-3">
+              <img 
+                src={proxyImageUrl} 
+                alt={event.imageCaption || event.title}
+                onLoad={() => setImgLoaded(true)}
+                className={`max-w-full max-h-full w-auto h-auto object-contain rounded-[6px] drop-shadow-[0_10px_30px_rgba(0,0,0,0.85)] group-hover:scale-[1.015] transition-transform duration-500 ${imgLoaded ? 'opacity-100' : 'opacity-80 animate-pulse'}`}
+              />
+            </div>
           </div>
           <figcaption className="p-3 bg-gradient-to-t from-black/95 via-black/80 to-transparent text-[11px] text-[#b5a990] flex items-center justify-between border-t border-[rgba(232,214,180,0.1)]">
             <span className="truncate pr-2 font-medium text-[#efe6d6]">
